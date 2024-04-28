@@ -1,5 +1,6 @@
 #  defaults
 .expo/
+.vscode/
 node_modules/
 dist/
 npm-debug.*
