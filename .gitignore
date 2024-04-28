@@ -19,7 +19,6 @@ web-build/
 
 # env / secrets / data
 .env
-data/
 
 # etc.
 NOTES.md
