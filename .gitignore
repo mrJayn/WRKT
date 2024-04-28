@@ -1,6 +1,6 @@
 #  defaults
-node_modules/
 .expo/
+node_modules/
 dist/
 npm-debug.*
 *.jks
