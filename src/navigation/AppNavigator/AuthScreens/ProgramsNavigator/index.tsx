@@ -11,6 +11,13 @@ const ProgramsNavigator = () => (
 			name={SCREENS.PROGRAMS.WEEKS}
 			component={ProgramsDetail}
 		/>
+		{/* 
+		<ProgramsStack.Screen
+				name={SCREENS.PROGRAMS.WEEKS_DETAIL}
+				component={Week}
+				options={options.listDetailScreen}
+			/> 
+		*/}
 	</ProgramsStack.Navigator>
 )
 

@@ -6,15 +6,16 @@ import SettingsScreen from '@screens/settings/SettingsScreen'
 import PreferencesScreen from '@screens/profile/preferences-screen'
 import MaxesScreen from '@screens/profile/maxes-screen'
 import ManageExsScreen from '@screens/profile/manage-exs-screen'
-import ConfirmSelectionScreen from '@screens/confirm-selection-screen'
+// import ConfirmSelectionScreen from '@screens/confirm-selection-screen'
+import AccountScreen from '@screens/settings/AccountScreen'
 
 const SettingsStack = createStackNavigator<SettingsStackParamList>()
 
 const SettingsNavigator = () => (
 	<SettingsStack.Navigator screenOptions={{ headerTransparent: true }}>
 		<SettingsStack.Screen
-			name={SCREENS.SETTINGS.ROOT}
-			component={SettingsScreen}
+			name={SCREENS.SETTINGS.ACCOUNT}
+			component={AccountScreen}
 		/>
 		{/* 
 		<SettingsStack.Screen

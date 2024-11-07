@@ -1,33 +1,33 @@
 import React from 'react'
-import { DefaultButtonProps } from '@components/DefaultButton'
-import { ScreenWrapperProps } from '@components/ScreenWrapper'
-import { KeyboardHandlerViewProps } from '@components/KeyboardHandlerView'
+import type { ScreenWrapperProps } from '@components/ScreenWrapper'
 
-type FormLayoutProps = KeyboardHandlerViewProps &
-	ScreenWrapperProps & {
-		/**  */
-		title?: string | undefined
+type FormLayoutProps = ScreenWrapperProps & {
+	/**  */
+	title?: string | undefined
 
-		/** */
-		formHeaderComponent?: ((props: any) => React.ReactNode) | undefined
+	/** */
+	formHeaderComponent?: ((props: any) => React.ReactNode) | undefined
 
-		/** */
-		formFooterComponent?: ((props: any) => React.ReactNode) | undefined
+	/** */
+	formFooterComponent?: ((props: any) => React.ReactNode) | undefined
 
-		/** */
-		submitButtonLabel?: string
+	/** */
+	submitButtonLabel?: string
 
-		/** */
-		onSubmit: DefaultButtonProps['onPress']
+	/** */
+	onSubmit: () => void
 
-		/** */
-		isValid?: boolean
+	/** */
+	isValid?: boolean
 
-		/** */
-		isLoading?: boolean
+	/** */
+	isLoading?: boolean
 
-		/** */
-		isComplete?: boolean
-	}
+	/** */
+	isComplete?: boolean
+
+	/** Enable or disable keyboard handling. */
+	keyboardHandlingEnabled?: boolean | undefined
+}
 
 export default FormLayoutProps

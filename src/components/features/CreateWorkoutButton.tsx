@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import { colors } from '@colors'
-import { useCreateWorkoutMutation } from '@features/Workouts/workoutsApi'
+import { useCreateWorkoutMutation } from '@features/Workouts/workoutsAPI'
 import DefaultButton from '@components/DefaultButton'
 import FadeView from '@components/FadeView'
 
@@ -12,7 +12,7 @@ function CreateWorkoutButton() {
 		if (isError) {
 			console.log('[ CreateWorkoutButton ] Error:', error)
 		}
-	}, [isError])
+	}, [error, isError])
 
 	return (
 		<View className='flex-1'>

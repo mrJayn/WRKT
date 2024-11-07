@@ -1,10 +1,9 @@
-import { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { colors } from '@colors'
-import usePreferredTheme from '@hooks/useColorScheme'
 import navigationRef from './navigationRef'
 import AppNavigator from './AppNavigator'
 import linkingConfig from './linkingConfig'
+import useTheme from '@hooks/useTheme'
 
 type NavigationRootProps = {
 	isAuthenticated: boolean
@@ -12,21 +11,21 @@ type NavigationRootProps = {
 }
 
 function NavigationRoot({ isAuthenticated, onReady }: NavigationRootProps) {
-	const colorScheme = usePreferredTheme()
+	const theme = useTheme()
 
 	const navigationTheme = useMemo(
 		() => ({
-			dark: colorScheme === 'dark',
+			dark: theme.type === 'dark',
 			colors: {
-				primary: colors.tint.primary[colorScheme],
-				border: colors.separator[colorScheme],
-				text: colors.tint.title[colorScheme],
-				notification: colors.blue.neon,
-				background: 'transparent',
-				card: 'transparent',
+				primary: theme.darkgreen[10],
+				text: theme.tint.title,
+				notification: theme.tint.nav,
+				border: theme.separator,
+				background: theme.transparent,
+				card: theme.transparent,
 			},
 		}),
-		[colorScheme]
+		[theme]
 	)
 
 	useEffect(() => {

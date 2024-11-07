@@ -18,7 +18,8 @@
 -   [About](#local-development)
 -   [Features](#testing-on-browsers-on-simulators-and-emulators)
 
----
+<br>
+<br>
 
 # About
 
@@ -33,14 +34,53 @@ Most notably, the app provides you with a **_Blank Canvas_** for you to create y
 -   🔨 [Editor](#editor)
 -   📈 [Program Creator](#program-creation)
 
-<br>
-<br>
- >> Images <<
-<br>
-<br>
+<br><br>
+// SCREENSHOTS HERE //
+<br><br>
 
 ## Today's Workout
 
-## Editor
+## Workout Editor
 
 ## Program Creation
+
+<br>
+<br>
+
+# App Structure and Conventions
+
+## Expo
+
+## RTK Query
+
+## Directory structure
+
+### `assets/`
+
+Static images ( .png ), icons ( .ico ), and font( .ttf ) assets used in the app.
+
+### `src/`
+
+-   **components/** - JSX components that are re-used in several places
+-   **constants/** - Constant values
+-   **features/** -
+-   **hooks/** -
+-   **libs/** - Library classes/functions, these are not React native components (ie: they are not UI)
+-   **navigation/** -
+-   **screens/** - These are components that define pages in the app.
+-   **setup/** -
+-   **types/** -
+-   **utils/** -
+
+### `styles/`
+
+These files define styles used among components
+
+<br>
+<br>
+
+# API
+
+## Django REST Framework
+
+## Simple JWT

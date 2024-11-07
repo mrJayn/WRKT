@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { P, DefaultScreen } from '@components/base'
-import { getAPI } from '@api/api-services'
 // import { useOnFocus } from '@hooks'
 
 function currentProgWeek(startdate, duration) {
@@ -15,7 +14,7 @@ const ProgramsScreen = () => {
 	const [editing, setEditing] = useState(false)
 
 	const refreshData = async () => {
-		const { data } = await getAPI({ route: 'program' })
+		// const { data } = await getAPI({ route: 'program' })
 		//const { programs, max_count } = data
 		setProgramsList(data)
 	}

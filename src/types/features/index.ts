@@ -1,19 +1,18 @@
-import User from './User'
-import { Profile, WeightUnits } from './Profile'
-import { Workout, EditableWorkout, Day } from './WorkoutTypes'
-import { Program, Week } from './ProgramTypes'
-import { Exercise, Set } from './Exercises'
+/**
+ * Redux store types
+ */
+export type { AppInfo } from './AppInfo'
+export type { AuthState } from './Auth'
 
-// prettier-ignore
-export type {
-	User,
-	Profile,
-	WeightUnits,
-	Workout,
-	EditableWorkout,
-	Day,
-	Program,
-	Week,
-	Exercise,
-	Set,
-}
+// user data types
+export type { User } from './User'
+export type { Profile, WeightUnits } from './Profile'
+export type { Exercise, Set } from './Exercises'
+export type { Workout } from './Workout'
+export type { Day } from './Day'
+export type { Program } from './Program'
+export type { Week } from './Week'
+
+// app types
+export type { NetworkState, NetworkStatus } from './NetworkState'
+export type { Locale } from './Locale'

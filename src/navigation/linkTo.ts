@@ -2,7 +2,7 @@
 //
 //
 //
-import { getActionFromState, getStateFromPath as RNgetStateFromPath } from '@react-navigation/core'
+import { getActionFromState, getStateFromPath } from '@react-navigation/core'
 import {
 	NavigationAction,
 	NavigationContainerRef,
@@ -10,15 +10,15 @@ import {
 	PartialState,
 	TabActions,
 } from '@react-navigation/native'
-import type { Writable } from 'type-fest'
+
 import CONST from '@src/CONST'
 import NAVIGATORS from '@src/NAVIGATORS'
 import type { Route } from '@src/ROUTES'
 import getTopMostTabRoute from './getTopMostTabRoute'
 import linkingConfig from './linkingConfig'
 import type { NavigationRoot, RootStackParamList, StackNavigationAction, State } from './types'
-import SCREENS from '@src/SCREENS'
-import customGetStateFromPath from './getStateFromPath'
+import customGetStateFromPath from './linkingConfig/getStateFromPath'
+import type { Writable } from 'type-fest'
 
 const { NAVIGATE, PUSH, REPLACE } = CONST.NAVIGATION.ACTION_TYPE
 
@@ -142,7 +142,7 @@ export default function linkTo(navigation: NavigationContainerRef<RootStackParam
 	const rootState = navigation.getRootState() as RootStackNavigationState
 	// const normalPath = normalizePath(path) as Route
 	// const stateFromPath = RNgetStateFromPath(normalPath, linkingConfig.config) as PartialState<RootStackNavigationState>
-	const stateFromPath = customGetStateFromPath(path)
+	const stateFromPath = customGetStateFromPath(path) as PartialState<NavigationState>
 
 	// console.log('action=', action)
 

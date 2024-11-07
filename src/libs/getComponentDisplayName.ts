@@ -1,5 +1,5 @@
-import { ComponentType } from 'react'
+import type { ComponentType } from 'react'
 
-export default function getComponentDisplayName<TProps>(component: ComponentType<TProps>): string {
+export default <TProps>(component: ComponentType<TProps>): string => {
 	return component.displayName || component.name || 'Component'
 }

@@ -1,5 +1,4 @@
 import { createEntityAdapter, createSelector, createSlice } from '@reduxjs/toolkit'
-import exercisesActions from './actions'
 import type { RootState } from '@features/Store'
 import type { Exercise } from '@src/types/features'
 
@@ -8,23 +7,21 @@ const exercisesAdapter = createEntityAdapter({
 	sortComparer: (a, b) => a.order - b.order,
 })
 
-const initialState = exercisesAdapter.getInitialState({})
-
 const exercisesSlice = createSlice({
 	name: 'exercises',
-	initialState,
+	initialState: exercisesAdapter.getInitialState({}),
 	reducers: {},
 	extraReducers(builder) {
-		builder
-			.addCase(exercisesActions.get.pending, (state, action) => {
-				//
-			})
-			.addCase(exercisesActions.get.fulfilled, (state, { payload }) => {
-				exercisesAdapter.setAll(state, payload.data)
-			})
-			.addCase(exercisesActions.get.rejected, (state, { payload }) => {
-				//
-			})
+		// builder
+		// 	.addCase(exercisesActions.get.pending, (state, action) => {
+		// 		//
+		// 	})
+		// 	.addCase(exercisesActions.get.fulfilled, (state, { payload }) => {
+		// 		exercisesAdapter.setAll(state, payload.data)
+		// 	})
+		// 	.addCase(exercisesActions.get.rejected, (state, { payload }) => {
+		// 		//
+		// 	})
 	},
 	selectors: {
 		selectByDay: (state, ownProps) => {
@@ -35,12 +32,12 @@ const exercisesSlice = createSlice({
 	},
 })
 
-export const {
-	get: getExercises,
-	create: createExercise,
-	update: updateExercise,
-	destroy: destroyExercise,
-} = exercisesActions
+// export const {
+// 	get: getExercises,
+// 	create: createExercise,
+// 	update: updateExercise,
+// 	destroy: destroyExercise,
+// } = exercisesActions
 
 export const {
 	selectIds: selectExerciseIds,

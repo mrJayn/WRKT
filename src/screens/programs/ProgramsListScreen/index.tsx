@@ -35,7 +35,7 @@ function ProgramsScreen() {
 	})
 
 	if (isError) {
-		return <QueryErrorMessage />
+		return <QueryErrorMessage message='Something went wrong, you may want to retry in a bit.' />
 	}
 
 	return (

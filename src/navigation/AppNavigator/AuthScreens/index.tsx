@@ -1,13 +1,15 @@
-import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
+
 import SCREENS from '@src/SCREENS'
 import NAVIGATORS from '@src/NAVIGATORS'
 import type { AuthStackParamList } from '@navigation/types'
 import RefreshTokenScreen from '@screens/RefreshTokenScreen'
+import authStackOptions from './authStackScreenOptions'
 import TabsNavigator from './TabsNavigator'
 import WorkoutsNavigator from './WorkoutsNavigator'
 import ProgramsNavigator from './ProgramsNavigator'
 import SettingsNavigator from './SettingsNavigator'
-import authStackOptions from './authStackScreenOptions'
+import NotFoundScreen from '@screens/NotFoundScreen'
 
 const AuthStack = createStackNavigator<AuthStackParamList>()
 
@@ -39,10 +41,34 @@ function AuthScreens() {
 				component={RefreshTokenScreen}
 				options={{ headerShown: false }}
 			/>
+			<AuthStack.Screen
+				name={SCREENS.NOT_FOUND}
+				component={NotFoundScreen}
+			/>
 		</AuthStack.Navigator>
 	)
 }
 
 AuthScreens.displayName = 'AuthStack'
-
 export default AuthScreens
+
+/*
+let isLoadingApp = false
+
+function handleNetworkReconnect() {
+	if (isLoadingApp) {
+		//App.openApp();
+	} else {
+		console.log('[handleNetworkReconnect] Sending ReconnectApp')
+		// App.reconnectApp(lastUpdateIDAppliedToClient);
+		// getOnyxDataForOpenOrReconnect(true)
+	}
+}
+
+========== ========== ========== ========== ==========
+
+useEffect(() => {
+			Network.listenForReconnect()
+			Network.onReconnect(handleNetworkReconnect)
+	}, [])
+*/

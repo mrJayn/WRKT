@@ -1,17 +1,4 @@
-import type { IsEqual, ValueOf } from './types/utils'
-import type CONST from './CONST'
-import { LinkModalType } from '@screens/LinkModal'
-import { Workout } from './types/features'
-/**
- * Builds a URL with an encoded URI component for the `backTo` param which can be added to the end of URLs
- */
-function getUrlWithBackToParam<TUrl extends string>(
-	url: TUrl,
-	backTo?: string
-): `${TUrl}` | `${TUrl}?backTo=${string}` | `${TUrl}&backTo=${string}` {
-	const backToParam = backTo ? (`${url.includes('?') ? '&' : '?'}backTo=${encodeURIComponent(backTo)}` as const) : ''
-	return `${url}${backToParam}` as const
-}
+import type { IsEqual } from './types/utils'
 
 const ROUTES = {
 	// ROOT will redirect the user to the last visited path if it exists, otherwise to the home page.
@@ -46,7 +33,7 @@ const ROUTES = {
 
 	LOGIN: {
 		route: 'login/:email?',
-		getRoute: (email: string) => `login/${email}` as const,
+		getRoute: (email: string = '') => `login/${email}` as const,
 	},
 	FORGOT_PASSWORD: 'login/reset-password',
 
@@ -55,6 +42,11 @@ const ROUTES = {
 
 	/** Workouts */
 	WORKOUTS: `w`,
+	WORKOUT_DETAIL: {
+		route: `w/:workoutID`,
+		getRoute: (workoutID: number) => `w/${workoutID}` as const,
+	},
+
 	WORKOUT_DAYS: {
 		route: `w/:workoutID/days`,
 		getRoute: (workoutID: number) => `w/${workoutID}/days` as const,
@@ -63,30 +55,52 @@ const ROUTES = {
 		route: `w/:wktID/d/:dayID`,
 		getRoute: (wktID: number, dayID: number) => `w/${wktID}/d/${dayID}` as const,
 	},
+
+	//
+
+	DAY_LIST: {
+		route: `workouts/:wID/days`,
+		getRoute: (wID: number) => `workouts/${wID}/days` as const,
+	},
+	DAY_DETAIL: {
+		route: `days/:dID`,
+		getRoute: (dID: number) => `days/${dID}` as const,
+	},
+
+	//
+
+	WORKOUT_EXERCISES: {
+		getRoute: (wktID: number | 'active') => `workouts/${wktID}/exercises/` as const,
+	},
+
 	WORKOUT_DAY_EXERCISES: {
-		route: `w/:wktID/d/:dayID/e`,
-		getRoute: (wktID: number, dayID: number) => `w/${wktID}/d/${dayID}/e` as const,
+		route: `workouts/:wktID/days/:dayID/exercises`,
+		getRoute: (wktID: number | 'active', dayID: number) => `workouts/${wktID}/days/${dayID}/exercises` as const,
 	},
 	WORKOUT_DAY_EXERCISES_DETAIL: {
-		route: `w/:wktID/d/:dayID/e/:exID`,
-		getRoute: (wktID: number, dayID: number, exID: number) => `w/${wktID}/d/${dayID}/e/${exID}` as const,
+		route: `workouts/:wktID/days/:dayID/exercises/:exID`,
+		getRoute: (wktID: number, dayID: number, exID: number) =>
+			`workouts/${wktID}/days/${dayID}/exercises/${exID}` as const,
 	},
 	WORKOUT_DAY_EXERCISE_SECONDARY: {
-		route: `w/:wktID/d/:dayID/e/:exID/secondary`,
-		getRoute: (wktID: number, dayID: number, exID: number) => `w/${wktID}/d/${dayID}/e/${exID}/secondary` as const,
+		route: `workouts/:wktID/days/:dayID/exercises/:exID/secondary`,
+		getRoute: (wktID: number, dayID: number, exID: number) =>
+			`workouts/${wktID}/days/${dayID}/exercises/${exID}/secondary` as const,
 	},
 	WORKOUT_DAY_EXERCISE_SECONDARY_ADD: {
-		route: `w/:wktID/d/:dayID/e/:exID/secondary/add`,
-		getRoute: (wktID: number, dayID: number, exID: number) => `w/${wktID}/d/${dayID}/e/${exID}/secondary/add` as const,
+		route: `workouts/:wktID/days/:dayID/exercises/:exID/secondary/add`,
+		getRoute: (wktID: number, dayID: number, exID: number) =>
+			`workouts/${wktID}/days/${dayID}/exercises/${exID}/secondary/add` as const,
 	},
 	WORKOUT_DAY_EXERCISE_SETS: {
-		route: `w/:wktID/d/:dayID/e/:exID/s`,
-		getRoute: (wktID: number, dayID: number, exID: number) => `w/${wktID}/d/${dayID}/e/${exID}/s` as const,
+		route: `workouts/:wktID/days/:dayID/exercises/:exID/s`,
+		getRoute: (wktID: number, dayID: number, exID: number) =>
+			`workouts/${wktID}/days/${dayID}/exercises/${exID}/sets` as const,
 	},
 	WORKOUT_DAY_EXERCISE_SETS_DETAIL: {
-		route: `w/:wktID/d/:dayID/e/:exID/s/:setID`,
+		route: `workouts/:wktID/days/:dayID/exercises/:exID/sets/:setID`,
 		getRoute: (wktID: number, dayID: number, exID: number, setID: number) =>
-			`w/${wktID}/d/${dayID}/e/${exID}/s/${setID}` as const,
+			`workouts/${wktID}/days/${dayID}/exercises/${exID}/sets/${setID}` as const,
 	},
 
 	/** Programs */
@@ -138,6 +152,71 @@ const ROUTES = {
 	SETTINGS_DELETE: `s/delete`,
 } as const
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const API_ROUTES = {
+	// authentication
+	PING: 'ping',
+	ROUTES: 'routes',
+	REGISTER: 'register',
+	REGISTER_VALIDATE: 'register/validate',
+	LOGIN: 'login',
+	LOGOUT: 'logout',
+	REFRESH: 'refresh',
+
+	// users
+	USER: 'user',
+	PROFILE: 'profile',
+	WORKOUTS: {
+		LIST: 'workouts',
+		DETAIL: {
+			url: 'workouts/:workout_pk',
+			getRoute: (workout_pk: number) => `workouts/${workout_pk}/` as const,
+		},
+	},
+	WORKOUT_DAYS: {
+		LIST: {
+			url: 'workouts/:workout_pk/days',
+			getRoute: (workout_pk: number) => `workouts/${workout_pk}/days/` as const,
+		},
+		DETAIL: {
+			url: 'workouts/:workout_pk/days/:day_pk',
+			getRoute: (workout_pk: number, day_pk: number) => `workouts/${workout_pk}/days/` as const,
+		},
+	},
+} as const
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const DRF_API_ROUTES = {
+	ping: 'api/ping',
+	routes: 'api/routes',
+	register: 'api/register',
+	validateUser: 'api/register/validate',
+	login: 'api/login',
+	logout: 'api/logout',
+	refresh: 'api/refresh',
+	user: 'api/user',
+	profile: 'api/profile',
+	workoutsExercisesList: 'api/workouts/:pk/exercises',
+	daysActive: 'api/days/active',
+	exercisesGetActiveWorkoutExercises: 'api/exercises/active',
+	libraryList: 'api/library',
+	libraryCustomsList: 'api/library/custom',
+	libraryDefualtsList: 'api/library/default',
+	libraryDetail: 'api/library/:pk',
+	workoutsList: 'api/workouts',
+	workoutsDetail: 'api/workouts/:pk',
+	daysList: 'api/days',
+	daysDetail: 'api/days/:pk',
+	programsList: 'api/programs',
+	programsDetail: 'api/programs/:pk',
+	weeksList: 'api/weeks',
+	weeksDetail: 'api/weeks/:pk',
+	exercisesList: 'api/exercises',
+	exercisesDetail: 'api/exercises/:pk',
+	setsList: 'api/workouts/:workout_pk/days/:day_pk/exercises/:exercise_pk/sets',
+	setsDetail: 'api/workouts/:workout_pk/days/:day_pk/exercises/:exercise_pk/sets/:pk',
+} as const
+
 type Routes = typeof ROUTES
 type RoutesKey = keyof Routes
 
@@ -150,7 +229,6 @@ type AllRoutes = {
 type Route = IsEqual<AllRoutes, string> extends true ? never : AllRoutes
 
 export default ROUTES
-
 export type { AllRoutes, Route }
 
 /*

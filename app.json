@@ -31,11 +31,31 @@
 			}
 		},
 		"web": {
-			"favicon": "./assets/icons/favicon.png"
+			"favicon": "assets/icons/favicon.png"
 		},
 		"experiments": {
 			"tsconfigPaths": true
 		},
-		"plugins": ["expo-apple-authentication"]
+		"plugins": [
+			"expo-apple-authentication",
+			[
+				"expo-asset",
+				{
+					"assets": [
+						"assets/icons/icon.png",
+						"assets/icons/adaptive-icon.png",
+						"assets/icons/inverse-adaptive-icon.png",
+						"assets/icons/favicon.png"
+					]
+				}
+			],
+			"expo-font",
+			[
+				"expo-secure-store",
+				{
+					"faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+				}
+			]
+		]
 	}
 }

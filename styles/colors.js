@@ -5,28 +5,25 @@
  *
  */
 
-const BASE = {
+const pallete = {
+	transparent: 'transparent',
+
+	/** Base colors */
+	white: '#ffffff',
+	black: '#000000',
 	red: '#a00',
 	orange: '#ff9500',
 	yellow: '#ffd426',
 	green: '#248a3d',
 	cyan: '#00c7be',
-	blue: '#0271a4',
+	// blue: '#0271a4',
 	indigo: '#3634a3',
 	purple: '#8944ab',
 	pink: '#ff6482',
 	brown: '#7f6545',
-}
 
-const pallete = {
-	transparent: 'transparent',
-	white: '#ffffff',
-	black: '#000000',
-	red: {
-		DEFAULT: '#a00',
-	},
+	/** A very dark ( mostly black ) lime green */
 	darkgreen: {
-		/** Very dark (mostly black) lime green */
 		10: '#1d3f21',
 		20: '#042a08',
 		30: '#042607',
@@ -39,8 +36,22 @@ const pallete = {
 		neon: '#498c6b',
 		DEFAULT: '#042A08',
 	},
+
+	// lighter_darkgreen: {
+	// 	10: '#69856d',
+	// 	20: '#507154',
+	// 	30: '#375d3c',
+	// 	40: '#1e4823',
+	// 	50: '#05340b',
+	// 	60: '#042a09',
+	// 	70: '#042408',
+	// 	80: '#031f07',
+	// 	90: '#031a06',
+	// 	DEFAULT: '#05340b',
+	// },
+
+	/** Light Slate Gray - a dark grayish blue. */
 	slate: {
-		/** Dark grayish blue. */
 		10: '#dce1ea',
 		20: '#c5cddd',
 		30: '#aeb9cf',
@@ -53,6 +64,8 @@ const pallete = {
 		neon: '#6199ff',
 		DEFAULT: '#78859e',
 	},
+
+	/** Steel Blue */
 	blue: {
 		10: '#dbe5f0',
 		20: '#b8cbe1',
@@ -66,6 +79,8 @@ const pallete = {
 		neon: '#007AFF',
 		DEFAULT: '#4d7db3',
 	},
+
+	/** Gray */
 	grey: {
 		1: '#f8f8f8',
 		5: '#f3f3f3',
@@ -91,65 +106,64 @@ const pallete = {
 	},
 }
 
-const colors = {
-	...pallete,
+module.exports = {
+	colors: {
+		...pallete,
 
-	/** background colors */
-	primary: {
-		light: pallete.white,
-		dark: '#0c0c0c',
-	},
-	secondary: {
-		light: pallete.grey[15],
-		dark: '#101010',
-	},
-	tertiary: {
-		light: '#efefef',
-		dark: '#202020',
-	},
-
-	/** text colors */
-	tint: {
+		/** background colors */
 		primary: {
-			light: pallete.grey[85],
-			dark: pallete.grey[15],
+			light: pallete.white,
+			dark: '#0c0c0c',
 		},
 		secondary: {
-			light: pallete.grey[55],
-			dark: pallete.grey[45],
+			light: pallete.grey[15],
+			dark: '#101010',
 		},
 		tertiary: {
-			light: pallete.grey[45],
-			dark: pallete.grey[55],
+			light: '#efefef',
+			dark: '#202020',
 		},
 
-		/** title or heading text colors */
-		title: {
-			light: pallete.grey[90],
-			dark: pallete.grey[10],
+		/** text colors */
+		tint: {
+			primary: {
+				light: pallete.grey[85],
+				dark: pallete.grey[15],
+			},
+			secondary: {
+				light: pallete.grey[55],
+				dark: pallete.grey[45],
+			},
+			tertiary: {
+				light: pallete.grey[45],
+				dark: pallete.grey[55],
+			},
+
+			/** title or heading text colors */
+			title: {
+				light: pallete.grey[90],
+				dark: pallete.grey[10],
+			},
+
+			/** highlight and cursor color of the text */
+			selection: {
+				light: pallete.grey[50],
+				dark: pallete.grey[50],
+			},
+
+			/** generic text colors */
+			success: pallete.green,
+			error: pallete.red,
+			warning: pallete.yellow,
+			nav: pallete.blue.neon,
+			// link: pallete.cyan,
+			// 'link-visited': pallete.indigo
 		},
 
-		/** highlight and cursor color of the text */
-		selection: {
-			light: pallete.grey[50],
-			dark: pallete.grey[50],
+		/** border colors */
+		separator: {
+			light: pallete.grey[5],
+			dark: '#fff1',
 		},
-
-		/** generic text colors */
-		success: BASE.green,
-		error: BASE.red,
-		warning: BASE.yellow,
-		nav: pallete.blue.neon,
-		// link: BASE.cyan,  'link-visited': BASE.indigo
 	},
-
-	/** border colors */
-	separator: {
-		light: pallete.grey[5],
-		dark: '#fff1',
-	},
-}
-
-module.exports = {
-	colors,
 }

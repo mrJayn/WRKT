@@ -1,44 +1,34 @@
 import API from '@features/API'
-import type { TagDescription } from '@reduxjs/toolkit/query'
+import CONST from '@src/CONST'
 import type { Profile } from '@src/types/features'
 
 type EditableProfile = Omit<Profile, 'id' | 'user'>
 
-type ProfileTags = TagDescription<'Profile'>[]
-
-const profileTagDescriptors: ProfileTags = [
-	{ type: 'Profile', id: 'notifications' },
-	{ type: 'Profile', id: 'day_one_weekday' },
-	{ type: 'Profile', id: 'units' },
-]
+const URLS = {
+	PROFILE: 'profile',
+}
 
 const profileAPI = API.injectEndpoints({
 	endpoints: (builder) => ({
-		/** Get a user's profile. */
+		/** Get the profile of the current user. */
 		getProfile: builder.query<Profile, void>({
-			query: () => ({ url: 'user/profile/' }),
-			providesTags: (result) => (result ? profileTagDescriptors : []),
+			query: () => URLS.PROFILE,
+			providesTags: (result) =>
+				result ? [...Object.keys(result).map((id) => ({ type: 'Profile' as const, id })), 'Profile'] : ['Profile'],
 		}),
 
-		/** Update a user's profile. */
+		/** Update the profile of the current user. */
 		updateProfile: builder.mutation<Profile, EditableProfile>({
 			query: (data) => ({
-				url: 'user/profile/',
+				url: URLS.PROFILE,
 				method: 'PATCH',
 				data,
 			}),
 			invalidatesTags: (result, error, args) =>
-				result
-					? ([...Object.entries(args).map(([id, val]) => !!val && { type: 'Profile', id })] as ProfileTags)
-					: [],
+				result ? [...Object.keys(result).map((id) => ({ type: 'Profile' as const, id }))] : [],
 		}),
 	}),
 })
 
 export default profileAPI
-
-// prettier-ignore
-export const {
-    useGetProfileQuery,
-
-} = profileAPI
+export const { useGetProfileQuery, useUpdateProfileMutation } = profileAPI

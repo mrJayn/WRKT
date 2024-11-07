@@ -1,12 +1,17 @@
-import React, { memo } from 'react'
-import { FlatList, ListRenderItem, View } from 'react-native'
+import React from 'react'
+import { FlatList, View } from 'react-native'
 import type { MultipleFieldErrors } from 'react-hook-form'
 //
-import { colors } from '@colors'
-import usePreferredTheme from '@hooks/useColorScheme'
 import Heading from '@components/Heading'
 import Icon from '@components/Icon'
 import P from '@components/P'
+import { theme } from 'tailwind.config'
+import cn from '@libs/cn'
+
+type PasswordRequirement = {
+	text: string
+	type: string
+}
 
 const passwordRequirements = [
 	{
@@ -21,36 +26,14 @@ const passwordRequirements = [
 		type: 'minLength',
 		text: '8 characters',
 	},
-] as const
+] as readonly PasswordRequirement[]
 
-type RenderItem = ListRenderItem<(typeof passwordRequirements)[number]>
+const VALID_ICON_NAME = 'checkbox-marked-circle-outline'
+const ERROR_ICON_NAME = 'checkbox-blank-circle-outline'
 
 function PasswordRequirementsList({ errorTypes, isValid }: { errorTypes?: MultipleFieldErrors; isValid?: boolean }) {
-	const colorScheme = usePreferredTheme()
-
-	const ListHeaderComponent = () => <Heading className='h6 text-base'>Your password must contain at least</Heading>
-
-	const renderItem: RenderItem = ({ item }) => {
-		const isItemValid = isValid || (!!errorTypes && !errorTypes[item.type])
-
-		const iconName = isItemValid ? 'checkbox-marked-circle-outline' : 'checkbox-blank-circle-outline'
-		const color = isItemValid ? colors.tint.success : colors.tint.primary[colorScheme]
-
-		return (
-			<View className='flex-row items-center gap-x-2'>
-				<Icon
-					name={iconName}
-					color={color}
-					size={16}
-				/>
-				<P
-					className='text-xs leading-xs'
-					style={{ color }}
-				>
-					{item.text}
-				</P>
-			</View>
-		)
+	const ListHeaderComponent = () => {
+		return <Heading className='h6 text-base'>Your password must contain at least</Heading>
 	}
 
 	return (
@@ -58,10 +41,29 @@ function PasswordRequirementsList({ errorTypes, isValid }: { errorTypes?: Multip
 			data={passwordRequirements}
 			keyExtractor={({ type }) => type}
 			ListHeaderComponent={ListHeaderComponent}
-			renderItem={renderItem}
 			className='flex-none mb-6'
 			contentContainerStyle={{ rowGap: 15 }}
 			pointerEvents='none'
+			renderItem={({ item }) => {
+				const isItemValid = isValid || (!!errorTypes && !errorTypes[item.type])
+
+				return (
+					<View className='flex-row items-center gap-x-2'>
+						<Icon
+							name={isItemValid ? VALID_ICON_NAME : ERROR_ICON_NAME}
+							size={16}
+							{...(isItemValid && { color: theme.colors.tint.success })}
+						/>
+						<P
+							className={cn('text-xs leading-xs', {
+								'text-tint-success': isItemValid,
+							})}
+						>
+							{item.text}
+						</P>
+					</View>
+				)
+			}}
 		/>
 	)
 }

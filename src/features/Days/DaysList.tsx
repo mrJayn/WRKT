@@ -2,8 +2,9 @@ import React, { useState, useCallback } from 'react'
 import { View } from 'react-native'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import DraggableFlatList, { DragEndParams, RenderItem, RenderItemParams } from 'react-native-draggable-flatlist'
+
 import type { Day } from '@src/types/features'
-import QueryErrorMessage from '@components/QueryErrorMessage'
+import P from '@components/P'
 import { useGetDaysByWorkoutQuery, useUpdateDayMutation } from './daysApi'
 
 interface Props {
@@ -59,7 +60,11 @@ function DaysList({ workoutId, renderItem }: Props) {
 	}
 
 	if (isError) {
-		return <QueryErrorMessage />
+		return (
+			<View className='flex-1 centered'>
+				<P className='h2 text-tint-error'>Something went wrong, you may want to retry in a bit.</P>
+			</View>
+		)
 	}
 
 	return (

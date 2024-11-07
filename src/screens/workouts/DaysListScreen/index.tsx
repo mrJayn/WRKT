@@ -1,44 +1,44 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
-import { useSelector } from 'react-redux'
 import { colors } from '@colors'
 
-import DaysList from '@features/Days/DaysList'
-import DaysListRenderItem from './DaysListRenderItem'
-import WeekdayIndicatorsList from './WeekdayIndicatorsList'
 //
 import Navigation from '@navigation/Navigation'
-import { AuthStackParamList, WorkoutsStackScreenProps } from '@navigation/types'
+import { WorkoutsStackScreenProps } from '@navigation/types'
 import SCREENS from '@src/SCREENS'
 import { selectWorkoutById } from '@features/Workouts/workoutsSlice'
+import DaysList from '@features/Days/DaysList'
 
 import useRootNavigation from '@hooks/useRootNavigation'
-
+import CustomHeaderBackButton from '@components/CustomHeaderBackButton'
 import DefaultButton from '@components/DefaultButton'
 import Heading from '@components/Heading'
 import ScreenWrapper from '@components/ScreenWrapper'
-import CustomHeaderBackButton from '@components/CustomHeaderBackButton'
-import { useNavigation } from '@react-navigation/native'
-import { StackNavigationProp } from '@react-navigation/stack'
-import NAVIGATORS from '@src/NAVIGATORS'
+import DayRenderItem from './DayRendertem'
+import WeekdayIndicatorsList from './WeekdayIndicatorsList'
+import useAppSelector from '@hooks/useAppSelector'
 
-type Props = WorkoutsStackScreenProps<typeof SCREENS.WORKOUTS.DAYS>
+type DaysScreenProps = WorkoutsStackScreenProps<typeof SCREENS.WORKOUTS.DAYS>
 
-function DaysScreen({ route: { params } }: Props) {
-	const navigation = useRootNavigation()
-
+function DaysScreen({
+	route: {
+		params: { workoutID },
+	},
+}: DaysScreenProps) {
 	const [isEditing, setIsEditing] = useState(false)
-	// const [shouldSaveEdits, setShouldSaveEdits] = useState(true)
-	const shouldSaveEdits = useRef(true)
+	const shouldSaveEdits = useRef(true) // const [shouldSaveEdits, setShouldSaveEdits] = useState(true)
 
-	const workout = useSelector(selectWorkoutById(params.workoutID))
+	const navigation = useRootNavigation()
+	const workout = useAppSelector((state) => selectWorkoutById(state, workoutID))
 
 	const toggleEditing = (editing: boolean) => {
 		setIsEditing(editing)
-		if (shouldSaveEdits.current) {
-			console.log('saving!')
-		} else {
-			console.log('canceled.')
+		if (!editing) {
+			if (shouldSaveEdits.current) {
+				console.log('saving!')
+			} else {
+				console.log('canceled.')
+			}
 		}
 	}
 
@@ -53,6 +53,7 @@ function DaysScreen({ route: { params } }: Props) {
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
+			title: workout.name,
 			headerLeft: () => (
 				<CustomHeaderBackButton
 					label={isEditing ? 'Cancel' : 'Workouts'}
@@ -77,15 +78,13 @@ function DaysScreen({ route: { params } }: Props) {
 
 	return (
 		<ScreenWrapper>
-			<Heading className='h3'>{workout.name || 'Days'}</Heading>
-
 			<View className='flex-1'>
 				<WeekdayIndicatorsList />
 
 				<DaysList
 					workoutId={workout.id}
 					renderItem={({ item, ...info }) => (
-						<DaysListRenderItem
+						<DayRenderItem
 							item={item}
 							editing={isEditing}
 							shouldUpdate={shouldSaveEdits.current}

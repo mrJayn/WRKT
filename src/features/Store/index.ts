@@ -1,42 +1,72 @@
-import _ from 'lodash'
-import { configureStore } from '@reduxjs/toolkit'
+import { Action, Reducer, ReducersMapObject, UnknownAction, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import Auth from '../auth'
-import User from '../User'
-import Profile from '../Profile'
-import workouts from '../Workouts/workoutsSlice'
-import Days from '../Days'
-import Exercises from '../Exercises'
-//
+
+import listenerMiddleware from '@libs/Middleware/listenerMiddleware'
+import * as Middleware from '@libs/Middleware'
+import authApi from '@features/auth/authApi'
 import API from '@features/API'
+//
+import appInfoSlice from '@features/AppInfo/appInfoSlice'
+import authSlice from '@features/auth/authSlice'
+import userSlice from '@features/User'
+import profileSlice from '@features/Profile/profileSlice'
+import workoutsSlice from '@features/Workouts/workoutsSlice'
+import daysSlice from '@features/Days'
+import exercisesSlice from '@features/Exercises'
+import NetworkSlice from '@features/Network'
 
-/**
- * Store config ->	https://redux-toolkit.js.org/api/configureStore
- */
+import customHandler from './customListenersHandler'
 
-//const debounceNotify = _.debounce((notify) => notify())
-
-const reducer = {
+const reducers: ReducersMapObject<any, UnknownAction, any> = {
+	//  API reducers
+	[authApi.reducerPath]: authApi.reducer,
 	[API.reducerPath]: API.reducer,
-	//
-	[Auth.name]: Auth.reducer,
-	//
-	[User.name]: User.reducer,
-	[Profile.name]: Profile.reducer,
-	workouts,
-	[Days.name]: Days.reducer,
-	[Exercises.name]: Exercises.reducer,
+
+	// App slices
+	[appInfoSlice.name]: appInfoSlice.reducer,
+	[NetworkSlice.reducerPath]: NetworkSlice.reducer,
+
+	//  User slices
+	[authSlice.name]: authSlice.reducer,
+	[userSlice.name]: userSlice.reducer,
+	[profileSlice.name]: profileSlice.reducer,
+	[workoutsSlice.name]: workoutsSlice.reducer,
+	[daysSlice.name]: daysSlice.reducer,
+	[exercisesSlice.name]: exercisesSlice.reducer,
 }
 
 const Store = configureStore({
-	reducer,
-	middleware: (getDefaultMiddleware) => {
-		return getDefaultMiddleware().concat(API.middleware)
+	reducer: {
+		//  API reducers
+		[authApi.reducerPath]: authApi.reducer,
+		[API.reducerPath]: API.reducer,
+
+		// App slices
+		[appInfoSlice.name]: appInfoSlice.reducer,
+		[NetworkSlice.reducerPath]: NetworkSlice.reducer,
+
+		//  User slices
+		[authSlice.name]: authSlice.reducer,
+		[userSlice.name]: userSlice.reducer,
+		[profileSlice.name]: profileSlice.reducer,
+		[workoutsSlice.name]: workoutsSlice.reducer,
+		[daysSlice.name]: daysSlice.reducer,
+		[exercisesSlice.name]: exercisesSlice.reducer,
 	},
+	middleware: (gDM) =>
+		gDM().prepend(listenerMiddleware).concat([
+			authApi.middleware,
+			API.middleware,
+			//
+		]),
+	devTools: process.env.NODE_ENV !== 'production',
 })
 
-setupListeners(Store.dispatch)
+//  Set-up the listeners with custom behaivors.
+setupListeners(Store.dispatch, customHandler)
+// Middleware.Reauthentication
 
+// type UninitializedState = StateFromReducersMapObject<typeof rootReducer>
 type RootState = ReturnType<typeof Store.getState>
 type AppDispatch = typeof Store.dispatch
 

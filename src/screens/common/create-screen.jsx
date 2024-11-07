@@ -1,7 +1,5 @@
-import PropTypes from 'prop-types'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { ActivityIndicator, Alert, View } from 'react-native'
-import { Button, P, Form_Input, ModalScreen } from '@components/base'
 import Animated, {
 	Easing,
 	Extrapolate,
@@ -17,9 +15,10 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FlatList } from 'react-native-gesture-handler'
 import { Controller, useForm } from 'react-hook-form'
+
 import { colors } from '@colors'
 
-export default function CreateModelScreen({ navigation, route }) {
+function CreateModelScreen({ navigation, route }) {
 	const { model, details } = route.params
 
 	const [isLoading, setIsLoading] = useState(false)

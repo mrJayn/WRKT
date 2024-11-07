@@ -1,15 +1,14 @@
+import { Easing } from 'react-native-reanimated'
+import SCREENS from './SCREENS'
+import CountryCodes from './constants/countries'
+
 /**
  * App constants.
  */
-import { Easing } from 'react-native-reanimated'
-import * as Url from '@libs/Url'
-import SCREENS from './SCREENS'
-
-const ACTIVE_WRKT_URL = Url.addTrailingForwardSlash(process.env.EXPO_PUBLIC_WRKT_URL ?? 'https://wrkt.com')
-
-/** Name constants for navigators located directly in the RootStack from `./navigation/ContentScreens`. */
 const CONST = {
-	APP_ID: process.env.EXPO_PUBLIC_APP_ID || 'com.mikejayne.wrkt',
+	APP_ID: 'com.mikejayne.wrkt',
+
+	APP_SLOGAN: 'Build a workout for yourself or at least do something.',
 
 	ANIMATION: {
 		OPACITY_DURATION: 250,
@@ -35,34 +34,92 @@ const CONST = {
 			duration: 250,
 			easing: Easing.in(Easing.ease),
 		},
+
+		SPLASH_EXIT_TRANSITION: {
+			duration: 1500,
+			easing: Easing.inOut(Easing.poly(3)),
+		},
 	},
 
-	AUTO_AUTH_STATE: {
-		NOT_STARTED: 'not-started',
-		SIGNING_IN: 'signing-in',
-		JUST_SIGNED_IN: 'just-signed-in',
-		FAILED: 'failed',
+	APP_STATE: {
+		ACTIVE: 'active',
+		BACKGROUND: 'background',
+		INACTIVE: 'inactive',
 	},
 
-	AUTH_TOKEN_TYPES: {
-		ANONYMOUS: 'anonymousAccount',
-		SUPPORT: 'support',
+	AUTH_HEADER_TYPE: 'Bearer',
+	// BEARER_TYPE: "JWT",
+
+	AXIOS_DEFAULTS: {
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+		timeout: 1000,
+		withCredentials: true,
+		xsrfCookieName: 'csrftoken',
+		xsrfHeaderName: 'X-CSRFToken',
 	},
 
-	BUTTON_ACTIVE_SCALE: 0.9,
-	BUTTON_ACTIVE_OPACITY: 0.6,
-	BUTTON_DISABLED_OPACITY: 0.3,
+	// AUTO_AUTH_STATE: {
+	// 	NOT_STARTED: 'not-started',
+	// 	SIGNING_IN: 'signing-in',
+	// 	JUST_SIGNED_IN: 'just-signed-in',
+	// 	FAILED: 'failed',
+	// },
+
+	// AUTH_TOKEN_TYPES: {
+	// 	ANONYMOUS: 'anonymousAccount',
+	// 	SUPPORT: 'support',
+	// },
+
+	BUTTON: {
+		ACTIVE_SCALE: 0.9,
+		ACTIVE_OPACITY: 0.65,
+		DISABLED_OPACITY: 0.3,
+	},
+
+	COUNTRIES: CountryCodes,
 
 	DATE_OF_BIRTH: {
 		MIN_AGE: 5,
 		MAX_AGE: 150,
 	},
 
+	EMAIL: {
+		SUPPORT: 'm63jayne@gmail.com',
+		// WRKT_EMAIL_DOMAIN: '@wrktapp.com',
+	},
+
+	ENVIRONMENT: {
+		DEV: 'development',
+		PRODUCTION: 'production',
+	},
+
+	ERROR: {
+		UNAUTHORIZED: 'Please enter valid credentials to continue.',
+		SERVICE_UNAVAILABLE: 'Our servers may be down. Please try again later.',
+		UNKNOWN_ERROR: 'Unknown error',
+		INVALID_TOKEN_PAIR: 'The token Pair is invalid or expired.',
+		UPDATE_REQUIRED: 'Upgrade required',
+		// BAD_REQUEST: 'Looks like something went wrong. Please try again later.',
+		// NOT_FOUND: 'Not found.',
+		// REQUEST_TIMEOUT: 'Request timeout',
+		// INTERNAL_SERVER_ERROR: 'Server error',
+	},
+
 	FIRST_NAME: {
 		MAX_LENGTH: 40,
 	},
 
+	FALLBACK_DISPLAY_DAY_LABELS: [`Day1`, `Day2`, `Day3`, `Day4`, `Day5`, `Day6`, `Day7`],
+
 	FONT_FAMILY: {
+		RALEWAY: 'Raleway',
+		RALEWAY_MEDIUM: 'Raleway-Medium',
+		RALEWAY_SEMIBOLD: 'Raleway-SemiBold',
+		RALEWAY_BOLD: 'Raleway-Bold',
+		//
 		INTER_THIN: 'Inter-Thin',
 		INTER_EXTRALIGHT: 'Inter-ExtraLight',
 		INTER_LIGHT: 'Inter-Light',
@@ -72,7 +129,27 @@ const CONST = {
 		INTER_BOLD: 'Inter-Bold',
 		INTER_EXTRABOLD: 'Inter-ExtraBold',
 		INTER_BLACK: 'Inter-Black',
+		//
 		INCONSOLATA: 'Inconsolata',
+	},
+
+	__TEST__GITHUB_RELEASE_URL: 'https://api.github.com/repos/expensify/app/releases/latest',
+	GITHUB_RELEASE_URL: 'https://api.github.com/repos/mrJayn/WRKT/releases/latest',
+	GOOGLE_CLOUD_URL: 'https://clients3.google.com/generate_204',
+
+	/** Descriptive HTTP status codes, for code readability. */
+	HTTP_STATUS: {
+		UNAUTHORIZED: 401,
+		SERVICE_UNAVAILABLE: 503,
+		UNKNOWN_ERROR: 520,
+		// OK: 200,
+		// CREATED: 201,
+		// NO_CONTENT: 204,
+		// BAD_REQUEST: 400,
+		// NOT_FOUND: 404,
+		// REQUEST_TIMEOUT: 408,
+		// UPDATE_REQUIRED: 426,
+		// INTERNAL_SERVER_ERROR: 500,
 	},
 
 	INPUT_MODE: {
@@ -97,7 +174,6 @@ const CONST = {
 		ES: 'es',
 		ES_ES: 'es-ES',
 		ES_ES_ONFIDO: 'es_ES',
-
 		DEFAULT: 'en',
 	},
 
@@ -107,6 +183,25 @@ const CONST = {
 			PUSH: 'PUSH',
 			NAVIGATE: 'NAVIGATE',
 		},
+	},
+
+	NETWORK: {
+		REACHABILITY_URL: 'https://clients3.google.com/generate_204',
+		REACHABILITY_METHOD: 'HEAD',
+		REACHABILITY_TEST: (response: Response) => Promise.resolve(response.status === 204),
+		REACHABILITY_SHORT_TIMEOUT: 5 * 1000, // 5s
+		REACHABILITY_LONG_TIMEOUT: 10 * 1000, // 10s
+		REACHABILITY_REQUEST_TIMEOUT: 15 * 1000, // 15s
+
+		MAX_PENDING_TIME_MS: 10 * 1000,
+		BACKEND_CHECK_INTERVAL_MS: 60 * 1000,
+		MAX_RETRIES: 10,
+		NETWORK_STATUS: {
+			ONLINE: 'online',
+			OFFLINE: 'offline',
+			UNKNOWN: 'unknown',
+		},
+		DEFAULT_STATE: { isOffline: false, isBackendReachable: true, shouldPerformBackendCheck: true },
 	},
 
 	PASSWORD: {
@@ -219,6 +314,25 @@ const CONST = {
 		TOOLBAR: 'toolbar',
 	},
 
+	SCREEN_LOADER_MODE: {
+		FADE_IN: 'fadeIn',
+		FADE_OUT: 'fadeOut',
+		NONE: 'none',
+		BOTH: 'both',
+		DEFAULT: 'both',
+	},
+
+	SCREEN_TRANSITION_END_TIMEOUT: 1000,
+
+	SECURE_KEYS: {
+		AUTH_TOKEN_PAIR: 'jwt',
+		ACCESS_TOKEN: 'access_token',
+		REFRESH_TOKEN: 'refresh_token',
+
+		DEVICE_ID: 'device_id',
+		THEME: 'theme',
+	},
+
 	TAB_ICONS: {
 		[SCREENS.TABS.MAIN]: 'home-outline',
 		[SCREENS.TABS.WORKOUTS]: 'build-outline',
@@ -240,11 +354,46 @@ const CONST = {
 		RESERVED_NAMES: ['Wrkt', 'Admin'],
 	},
 
+	API_VIEWSETS: {
+		ROOT: '',
+		ROUTES: 'routes',
+		//
+		REGISTER: 'register',
+		REGISTER_VALIDATE: 'register_validate',
+		LOGIN: 'login',
+		LOGOUT: 'logout',
+		REFRESH: 'refresh',
+		VERIFY: 'verify',
+		//
+		USER: 'user',
+		PROFILE: 'profile',
+		WORKOUTS: 'workouts',
+		WORKOUTS_DETAIL: 'workouts_detail',
+		DAYS: 'days',
+		DAYS_DETAIL: 'days_detail',
+		ACTIVE_WORKOUT_DAYS: 'days_active',
+		PROGRAMS: 'programs',
+		PROGRAMS_DETAIL: 'programs_detail',
+		WEEKS: 'weeks',
+		WEEKS_DETAIL: 'weeks_detail',
+		EXERCISES: 'exercises',
+		EXERCISES_DETAIL: 'exercises_detail',
+		ACTIVE_WORKOUT_EXERCISES: 'exercises_active',
+		LIBRARY: 'library',
+		LIBRARY_DETAIL: 'library_detail',
+	},
+
+	API_VIEWSET_ACTIONS: {
+		LIST: 'list',
+		CREATE: 'create',
+		RETRIEVE: 'retrieve',
+		UPDATE: 'update',
+		DESTROY: 'destroy',
+	},
+
 	WEEKDAY_NAMES: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
 
 	WEEKDAY_SHORT_NAMES: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
-
-	WRKT_URL: ACTIVE_WRKT_URL,
 } as const
 
 export default CONST

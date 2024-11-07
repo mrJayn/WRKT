@@ -1,29 +1,25 @@
-import { ForeignKey } from '../utils'
-
 type Set = {
 	id: number
-	exercise: ForeignKey
+	exercise: number // fk
 	sets?: string | undefined
 	reps?: string | undefined
 	weight?: string | undefined
 }
 
-type ExerciseForeignKeys =
-	| {
-			day: ForeignKey
-			week?: undefined
-	  }
-	| {
-			day?: undefined
-			week: ForeignKey
-	  }
+type WorkoutExerciseFKs = { day: number; week?: undefined }
+type ProgramExerciseFKs = { day?: undefined; week: number }
 
-type Exercise = {
+type BaseExercise = {
 	id: number
 	name: string
 	order: number
-	library_ref?: ForeignKey | undefined
+	library_ref?: number | undefined
 	sets?: ReadonlyArray<Set> | undefined
-} & ExerciseForeignKeys
+}
+
+type Exercise = BaseExercise & (WorkoutExerciseFKs | ProgramExerciseFKs)
+
+type WorkoutExercise = BaseExercise & WorkoutExerciseFKs
+type ProgramExercise = BaseExercise & ProgramExerciseFKs
 
 export type { Exercise, Set }

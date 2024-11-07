@@ -17,7 +17,7 @@ const Form_Input = forwardRef(function Form_Input(props, ref) {
 			{label && <LabelText {...{ errors }}>{label}</LabelText>}
 
 			<StyledTextInput
-				tw={`w-full py-5 px-3 text-base font-raleway text-tint-light dark:text-tint-dark bg-grey-15 dark:bg-grey-95 ${
+				tw={`w-full py-5 px-3 text-base font-inter-regular text-tint-light dark:text-tint-dark bg-grey-15 dark:bg-grey-95 ${
 					errors ? '' : ''
 				}`}
 				placeholderTextColor='#fff4'

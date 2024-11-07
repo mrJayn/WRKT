@@ -13,11 +13,13 @@ const WorkoutsNavigator = () => {
 			screenOptions={editorStackNavigationScreenOptions}
 		>
 			<WorkoutsStack.Screen
+				// Days List ( selected workout )
 				name={SCREENS.WORKOUTS.DAYS}
 				component={DaysListScreen}
 				options={options.listScreen}
 			/>
 			<WorkoutsStack.Screen
+				// Exercises List ( selected day )
 				name={SCREENS.WORKOUTS.DAYS_DETAIL}
 				component={DayDetailScreen}
 				options={options.listDetailScreen}

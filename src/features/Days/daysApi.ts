@@ -1,35 +1,52 @@
+import { createSelector } from '@reduxjs/toolkit'
+import type { Day } from '@src/types/features'
+import type { Weekday } from '@src/types/utils'
 import API from '@features/API'
 import { providesList } from '../tagUtils'
-import type { Day } from '@src/types/features'
 
-const daysApi = API.injectEndpoints({
+// type DayWithExercises = Day & {exercises: readonly Exercise[] }
+
+const URLS = {
+	DAYS: {
+		url: 'days/',
+		getDetailUrl: (pk: number | string) => `days/${pk}/`,
+	},
+}
+
+const daysAPI = API.injectEndpoints({
 	endpoints: (builder) => ({
 		/** List all Days */
 		getDays: builder.query<Day[], void>({
-			query: () => ({ url: 'user/days/' }),
+			query: () => URLS.DAYS.url,
 			providesTags: (result, err, args) => providesList(result, 'Day'),
 		}),
 
-		/** List Days by workout */
-		getDaysByWorkout: builder.query<Day[], { workoutId: number }>({
-			query: ({ workoutId }) => ({
-				url: 'user/days/',
-				params: { workout: workoutId },
+		/**
+		 * Get the days list for a workout.
+		 */
+		getDaysByWorkout: builder.query<Day[], { workoutID: number }>({
+			query: ({ workoutID }) => ({
+				url: URLS.DAYS.url,
+				params: { workout: workoutID },
 			}),
 			providesTags: (result, err, args) => providesList(result, 'Day'),
 			// providesTags: (result, err, { workoutId }) => [{ type: 'Day', id: `WORKOUT-${workoutId}-DAYS` }],
 		}),
 
-		/** List Days by activeWorkout */
+		/**
+		 * Get the days list for the active workout.
+		 */
 		getActiveWorkoutDays: builder.query<Day[], void>({
-			query: () => ({ url: 'user/days/active/' }),
+			query: () => 'days/active/',
 			providesTags: (result, err, args) => providesList(result, 'Day'),
 		}),
 
-		/** Update Day */
+		/**
+		 * Update Day
+		 */
 		updateDay: builder.mutation<Day, { id: number; name: string }>({
 			query: ({ id, name }) => ({
-				url: `user/days/${id}/`,
+				url: URLS.DAYS.getDetailUrl(id),
 				method: 'PATCH',
 				data: { name },
 			}),
@@ -52,12 +69,28 @@ const daysApi = API.injectEndpoints({
 			 		: [{ type: 'ActiveDay', id: 'LIST' }],
 */
 
-export default daysApi
+/*
+const selectDaysListResult = daysAPI.endpoints.getDays.select()
+const selectActiveWorkoutDaysResult = daysAPI.endpoints.getActiveWorkoutDays.select()
 
-// prettier-ignore
-export const {
+const selectDaysList = createSelector(selectDaysListResult, (res) => res?.data ?? [])
+
+const selectActiveWorkoutDays = createSelector(selectActiveWorkoutDaysResult, (res) => res?.data ?? [])
+
+const selectDayByWeekday = createSelector(
+	(data) => data ?? [],
+	(data, weekday: Weekday) => weekday,
+	(data: Day[], weekday: Weekday) => data.find(({ dayIndex }) => dayIndex === weekday)
+)
+*/
+
+const { useGetActiveWorkoutDaysQuery, useGetDaysQuery, useGetDaysByWorkoutQuery, useUpdateDayMutation } = daysAPI
+
+export default daysAPI
+export {
 	useGetActiveWorkoutDaysQuery,
 	useGetDaysQuery,
 	useGetDaysByWorkoutQuery,
 	useUpdateDayMutation,
-} = daysApi
+	//
+}

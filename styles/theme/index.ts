@@ -1,40 +1,45 @@
 import CONST from '@src/CONST'
-import type { ThemeColors, ThemeName } from './types'
-import { colors } from '..'
+import type { Theme, ThemeName } from './types'
+import { colors } from '../colors'
+import linearGradientColors from '../linearGradients'
 
-const { nav, success, warning, error, ...tint } = colors.tint
+const { primary, secondary, tertiary, tint, separator, ...pallete } = colors
 
-const getThemeColors = (theme: ThemeName): ThemeColors => ({
-	bg: {
-		primary: colors.primary[theme],
-		secondary: colors.secondary[theme],
-		tertiary: colors.tertiary[theme],
-	},
+const getTheme = (theme: ThemeName): Theme => ({
+	type: theme,
 
-	text: {
+	primary: primary[theme],
+	secondary: secondary[theme],
+	tertiary: tertiary[theme],
+
+	tint: {
 		primary: tint.primary[theme],
 		secondary: tint.secondary[theme],
 		tertiary: tint.tertiary[theme],
-		heading: tint.title[theme],
+		title: tint.title[theme],
+		selection: tint.selection[theme],
 		/** static tint colors */
-		nav,
-		success,
-		warning,
-		error,
+		nav: tint.nav,
+		success: tint.success,
+		warning: tint.warning,
+		error: tint.error,
 	},
 
-	separator: colors.separator[theme],
+	separator: separator[theme],
 
-	white: colors.white,
-	black: colors.black,
-	transparent: colors.transparent,
+	...pallete,
+
+	linearGradients: {
+		primary: linearGradientColors.primary[theme],
+		secondary: linearGradientColors.secondary[theme],
+	},
 })
 
-const themes = {
-	[CONST.THEME.LIGHT]: getThemeColors(CONST.THEME.LIGHT),
-	[CONST.THEME.DARK]: getThemeColors(CONST.THEME.DARK),
-} satisfies Record<ThemeName, ThemeColors>
+const theme = {
+	[CONST.THEME.LIGHT]: getTheme(CONST.THEME.LIGHT),
+	[CONST.THEME.DARK]: getTheme(CONST.THEME.DARK),
+} satisfies Record<ThemeName, Theme>
 
-export default themes
+export default theme
 
-export const defaultTheme = themes[CONST.THEME.FALLBACK]
+export const defaultTheme = theme[CONST.THEME.FALLBACK]

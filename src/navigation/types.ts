@@ -19,7 +19,6 @@ import SCREENS from '@src/SCREENS'
 import type { Route as Routes } from '@src/ROUTES'
 import type { Workout, Day, Program, Week } from '@src/types/features'
 import type { ValueOf } from '@src/types/utils'
-import type { UserCredentials, UserData, UserEmail } from '@features/auth/types'
 import type { LinkModalType } from '@screens/LinkModal'
 
 type NavigationRef = NavigationContainerRefWithCurrent<RootStackParamList>
@@ -61,9 +60,16 @@ type State<TParamList extends ParamListBase = ParamListBase> =
 /**  All navigator param lists  */
 type RegisterStackParamList = {
 	[SCREENS.REGISTER.WITH_EMAIL]: undefined
-	[SCREENS.REGISTER.USER_EXISTS_MODAL]: UserEmail
-	[SCREENS.REGISTER.CREATE_PASSWORD]: UserEmail
-	[SCREENS.REGISTER.CREATE_USERNAME]: UserCredentials
+	[SCREENS.REGISTER.USER_EXISTS_MODAL]: {
+		email: string
+	}
+	[SCREENS.REGISTER.CREATE_PASSWORD]: {
+		email: string
+	}
+	[SCREENS.REGISTER.CREATE_USERNAME]: {
+		email: string
+		password: string
+	}
 }
 
 type WorkoutsStackParamList = {
@@ -105,11 +111,12 @@ type SharedScreensParamList = {
 	[NAVIGATORS.TABS_NAVIGATOR]: NavigatorScreenParams<TabsNavigatorParamList>
 	// [SCREENS.TRANSITION_BETWEEN_APPS]: undefined
 	[SCREENS.REFRESH_TOKEN]: undefined
+	[SCREENS.NOT_FOUND]: undefined
 }
 
 type PublicStackParamList = SharedScreensParamList & {
 	[NAVIGATORS.REGISTER_NAVIGATOR]: NavigatorScreenParams<RegisterStackParamList>
-	[SCREENS.LOGIN]: Partial<UserEmail>
+	[SCREENS.LOGIN]: { email: string }
 	[SCREENS.FORGOT_PASSWORD]: undefined
 }
 
@@ -119,22 +126,30 @@ type AuthStackParamList = SharedScreensParamList & {
 	[NAVIGATORS.SETTINGS_NAVIGATOR]: NavigatorScreenParams<SettingsStackParamList>
 }
 
-/**  Root stack props  */
+/** Param list type for the `RootStack` navigator. */
 type RootStackParamList = PublicStackParamList & AuthStackParamList
 
+/** Screen props type for the `RootStack` navigator. */
 type RootStackScreenProps<RouteName extends keyof RootStackParamList> = StackScreenProps<RootStackParamList, RouteName>
 
-type RootStackNavigationProp = StackNavigationProp<RootStackParamList>
-
-export type TabsNavigatorScreenProps<RouteName extends keyof TabsNavigatorParamList> = CompositeScreenProps<
+/** Screen props type for the `TabsNavigator` navigator. */
+type TabsNavigatorScreenProps<RouteName extends keyof TabsNavigatorParamList> = CompositeScreenProps<
 	BottomTabScreenProps<TabsNavigatorParamList, RouteName>,
 	RootStackScreenProps<typeof NAVIGATORS.TABS_NAVIGATOR>
 >
 
-export type WorkoutsStackScreenProps<T extends keyof WorkoutsStackParamList> = CompositeScreenProps<
-	StackScreenProps<WorkoutsStackParamList, T>,
+/** Screen props type for the `WorkoutsStack` navigator. */
+type WorkoutsStackScreenProps<RouteName extends keyof WorkoutsStackParamList> = CompositeScreenProps<
+	StackScreenProps<WorkoutsStackParamList, RouteName>,
 	RootStackScreenProps<typeof NAVIGATORS.WORKOUTS_NAVIGATOR>
 >
+
+/** Screen props type for the `EditorStack` navigator. */
+type EditorStackScreenProps<RouteName extends keyof WorkoutsStackParamList | keyof ProgramsStackParamList> =
+	CompositeScreenProps<
+		StackScreenProps<WorkoutsStackParamList & ProgramsStackParamList, RouteName>,
+		RootStackScreenProps<typeof NAVIGATORS.WORKOUTS_NAVIGATOR>
+	>
 
 export type {
 	NavigationRef,
@@ -161,6 +176,9 @@ export type {
 	//
 	RootStackParamList,
 	RootStackScreenProps,
+	TabsNavigatorScreenProps,
+	WorkoutsStackScreenProps,
+	//
 }
 
 /*

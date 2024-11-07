@@ -1,4 +1,5 @@
-import { TextInput, type TextInputProps } from 'react-native'
+import type { TextInputProps } from 'react-native'
+import { TextInput } from 'react-native'
 
 type BaseTextInputProps = TextInputProps & {
 	/** label placeholder text */
@@ -33,7 +34,5 @@ type BaseTextInputProps = TextInputProps & {
 }
 
 type BaseTextInputRef = typeof TextInput & TextInput & HTMLInputElement
-
-export default BaseTextInputProps
 
 export type { BaseTextInputProps, BaseTextInputRef }

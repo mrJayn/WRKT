@@ -52,7 +52,7 @@ function FormLayout({
 					</ScreenWrapper>
 				</KeyboardHandlerView>
 
-				{isLoading === true && <ScreenLoader mode='fadeIn' />}
+				{isLoading === true && <ScreenLoader />}
 			</Animated.View>
 		)
 	)

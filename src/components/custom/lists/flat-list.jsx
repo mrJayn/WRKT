@@ -1,5 +1,5 @@
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
-import { P } from 'src/components/base'
+import P from '@components/P'
 
 export default function BaseFlatList({
 	data,

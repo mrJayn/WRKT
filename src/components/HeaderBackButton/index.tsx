@@ -1,11 +1,10 @@
 import { I18nManager, Image, Platform, StyleSheet } from 'react-native'
 import { HeaderBackButton as RNHeaderBackButton } from '@react-navigation/elements'
 import reactNavigationBackImage from 'node_modules/@react-navigation/elements/src/assets/back-icon.png'
-//
-import { colors } from '@colors'
-import getPrevRouteName from './getPrevRouteName'
-import { BackImageStyle, HeaderBackButtonProps, HeaderButtonBackImageProps } from './types'
+import { theme } from 'tailwind.config'
+
 import Navigation from '@navigation/Navigation'
+import { BackImageStyle, HeaderBackButtonProps, HeaderButtonBackImageProps } from './types'
 
 const HeaderButtonBackImage = ({ style, source, ...props }: HeaderButtonBackImageProps) => (
 	<Image
@@ -19,13 +18,12 @@ const HeaderButtonBackImage = ({ style, source, ...props }: HeaderButtonBackImag
 function HeaderBackButton({
 	label: customLabel,
 	onPress,
-	tintColor: customTintColor,
+	tintColor = theme.colors.blue.neon,
 	backImageVisible = true,
 	imageSource = reactNavigationBackImage,
 	...props
 }: HeaderBackButtonProps) {
-	const label = customLabel || getPrevRouteName() || 'Back'
-	const tintColor = customTintColor || colors.blue.neon
+	const label = customLabel || Navigation.getPrevRouteName() || 'Back'
 
 	const handlePress = onPress ?? Navigation.goBack
 

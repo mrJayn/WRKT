@@ -6,7 +6,7 @@ import { useSharedValue } from 'react-native-reanimated'
 import { colors } from '@colors'
 import getSecureEntryKeyboardType from '@libs/getSecureEntryKeyboardType'
 import getAutoCompleteContentTypeProps from '@libs/getAutoCompleteContentTypeProps'
-import usePreferredTheme from '@hooks/useColorScheme'
+import useThemePreference from '@hooks/useThemePreference'
 import DefaultButton from '@components/DefaultButton'
 import type { BaseTextInputProps, BaseTextInputRef } from './types'
 import TextInputLabel from '../TextInputLabel'
@@ -50,7 +50,7 @@ const BaseTextInput = (
 	const [passwordHidden, setPasswordHidden] = useState(secureTextEntry)
 
 	const navigation = useNavigation()
-	const colorScheme = usePreferredTheme()
+	const colorScheme = useThemePreference()
 
 	// const initialActiveLabel = Boolean(!!forceLabelActive || initialValue.length > 0)
 	const isLabelActiveSV = useSharedValue(Boolean(!!forceLabelActive || initialValue.length > 0))
@@ -89,6 +89,7 @@ const BaseTextInput = (
 			return // `forceLabelActive` is true, or shared value has already updated.
 		}
 		isLabelActiveSV.value = _active
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasValue, isFocused, forceLabelActive])
 
 	/**  Set the `hasValueRef` when the value is cleared externally.  */
@@ -113,6 +114,7 @@ const BaseTextInput = (
 		})
 
 		return unsubscribe
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [navigation])
 
 	return (

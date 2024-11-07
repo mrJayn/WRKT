@@ -1,10 +1,9 @@
-import type { LinkingOptions } from '@react-navigation/native'
-import type { RootStackParamList } from '../types'
 import NAVIGATORS from '@src/NAVIGATORS'
 import SCREENS from '@src/SCREENS'
-import ROUTES, { Route } from '@src/ROUTES'
+import ROUTES from '@src/ROUTES'
+import { LinkingConfig } from './types'
 
-const config: LinkingOptions<RootStackParamList>['config'] = {
+const config: LinkingConfig['config'] = {
 	initialRouteName: NAVIGATORS.TABS_NAVIGATOR,
 	screens: {
 		// Main Routes

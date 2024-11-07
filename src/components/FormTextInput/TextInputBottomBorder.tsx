@@ -1,12 +1,11 @@
 import React from 'react'
-import { ViewStyle } from 'react-native'
 import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated'
-import { colors } from '@colors'
+import { theme } from 'tailwind.config'
 
 const BASE_OPACITY = 0.3
-const BASE_COLOR = colors.grey[50]
-const ERROR_COLOR = colors.tint.error
-const VALID_COLOR = colors.tint.success
+const BASE_COLOR = theme.colors.grey[50]
+const ERROR_COLOR = theme.colors.tint.error
+const VALID_COLOR = theme.colors.tint.success
 
 function TextInputBottomBorder({
 	isValid,

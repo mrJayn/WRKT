@@ -1,36 +1,15 @@
-/**
- * Types used in the `authApi` injected endpoint.
- */
+/** A JSON web token. */
+type AuthToken = string
 
-type JWT = {
-	access: string
-	refresh: string
+/** A pair of JSON web tokens. */
+type AuthTokenPair = {
+	access: AuthToken
+	refresh: AuthToken
 }
 
-type UserEmail = {
-	email: string
+type AuthState = {
+	/** The auth token for the current user. Used to indicate authentication. */
+	authToken?: AuthToken | undefined
 }
 
-type UserPhoneNumber = {
-	phone_number: string
-}
-
-type UserCredentials = UserEmail & {
-	password: string
-}
-
-type UserData = UserCredentials & {
-	username?: string
-	first_name?: string
-	last_name?: string
-}
-
-type UserToken = {
-	token: string
-}
-
-// type RefreshToken = {
-// 	refresh: string
-// }
-
-export type { JWT, UserEmail, UserCredentials, UserData, UserToken }
+export type { AuthState, AuthToken, AuthTokenPair }

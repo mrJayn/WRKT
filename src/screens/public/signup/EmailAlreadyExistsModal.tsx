@@ -7,7 +7,7 @@ import ROUTES from '@src/ROUTES'
 import SCREENS from '@src/SCREENS'
 import Navigation from '@navigation/Navigation'
 import { RegisterStackParamList } from '@navigation/types'
-import usePreferredTheme from '@hooks/useColorScheme'
+import useThemePreference from '@hooks/useThemePreference'
 import DefaultButton from '@components/DefaultButton'
 import Heading from '@components/Heading'
 import P from '@components/P'
@@ -15,7 +15,7 @@ import P from '@components/P'
 type Props = StackScreenProps<RegisterStackParamList, typeof SCREENS.REGISTER.USER_EXISTS_MODAL>
 
 function UserAlreadyExistsModal({ route }: Props) {
-	const colorScheme = usePreferredTheme()
+	const colorScheme = useThemePreference()
 
 	const dismissModal = () => {
 		Navigation.goBack()

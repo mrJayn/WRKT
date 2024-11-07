@@ -7,8 +7,8 @@ type AppNavigatorProps = {
 
 function AppNavigator({ isAuthenticated }: AppNavigatorProps) {
 	if (isAuthenticated) {
-		const ContentScreens = require('./AuthScreens').default
-		return <ContentScreens />
+		const AuthScreens = require('./AuthScreens').default
+		return <AuthScreens />
 	}
 
 	const PublicScreens = require('./PublicScreens').default
@@ -16,5 +16,4 @@ function AppNavigator({ isAuthenticated }: AppNavigatorProps) {
 }
 
 AppNavigator.displayName = 'AppNavigator'
-
 export default AppNavigator

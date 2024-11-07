@@ -70,7 +70,7 @@ export function createForSlideCardStyleInterpolator(direction: SlideDirection, o
 	return forSlideCardStyleInterpolator
 }
 
-export const forSlideUp = createForSlideCardStyleInterpolator('bottom')
+export const forSlideUp = createForSlideCardStyleInterpolator('bottom', { firstOffset: 300 })
 export const forSlideRight = createForSlideCardStyleInterpolator('right')
 export const forSlideDown = createForSlideCardStyleInterpolator('top')
 export const forSlideLeft = createForSlideCardStyleInterpolator('left')

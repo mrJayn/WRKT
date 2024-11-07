@@ -1,37 +1,29 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { ActivityIndicator } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { BlurView } from 'expo-blur'
-import { colors } from '@colors'
+import { theme } from 'tailwind.config'
 import CONST from '@src/CONST'
 
-type ScreenLoaderProps = {
-	mode?: 'fadeIn' | 'both' | 'fadeOut'
-	fadeDuration?: number
-	shouldDelayFadeOut?: boolean
-}
+// layout animations
+const entering = FadeIn.duration(CONST.ANIMATION.OPACITY_DURATION)
+const exiting = FadeOut.delay(250).duration(CONST.ANIMATION.OPACITY_DURATION)
 
-export default function ScreenLoader({
-	mode = 'fadeOut',
-	fadeDuration = CONST.ANIMATION.OPACITY_DURATION,
-	shouldDelayFadeOut = false,
-}: ScreenLoaderProps) {
-	// prettier-ignore
-	const entering = 
-		mode === 'fadeOut' 
-		? undefined 
-		: FadeIn.duration(fadeDuration)
+// type ScreenLoaderProps = {}
 
-	// prettier-ignore
-	const exiting =
-		mode === 'fadeIn'
-			? undefined
-			: FadeOut.delay( shouldDelayFadeOut ? 100 : 0).duration(fadeDuration)
+function ScreenLoader() {
+	const isFirstRender = useRef(true)
+
+	useEffect(() => {
+		if (isFirstRender.current) {
+			isFirstRender.current = false
+		}
+	}, [])
 
 	return (
 		<Animated.View
 			className='absoluteFill centered bg-black/80 z-[99]'
-			entering={entering}
+			{...(!isFirstRender.current && { entering })}
 			exiting={exiting}
 		>
 			<BlurView
@@ -41,40 +33,11 @@ export default function ScreenLoader({
 			/>
 			<ActivityIndicator
 				size='large'
-				color={colors.grey[40]}
+				color={theme.colors.grey[40]}
 			/>
 		</Animated.View>
 	)
 }
+ScreenLoader.displayName = 'ScreenLoader'
 
-/* 
-interface EllipsisProps {
-	progress: SharedValue<number>
-	range: [number,number,number,number]
-}
-
-const TIME = 500
-const EASE = Easing.linear
-
-function Ellipsis({ progress, range }: EllipsisProps) {
-	const opacityStyle = useAnimatedStyle(() => ({
-		opacity: interpolate(progress.value, range, [0, 1, 1, 0], Extrapolate.CLAMP),
-	}))
-
-	return (
-		<Animated.View
-			className='rounded-full bg-white h-1.5 aspect-[1/1] mx-1'
-			style={[opacityStyle]}
-		/>
-	)
-}
-
-//========
-
-<View
-				className='flex-row items-end mt-3'
-			>
-				<Ellipsis {...{ progress, range: [0, 100, 300, 360] }} />
-				<Ellipsis {...{ progress, range: [100, 200, 300, 360] }} />
-				<Ellipsis {...{ progress, range: [200, 300, 300, 360] }} />
-			</View> */
+export default ScreenLoader

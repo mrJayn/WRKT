@@ -1,27 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Image, Dimensions } from 'react-native'
-import Animated, {
-	runOnJS,
-	useSharedValue,
-	useAnimatedStyle,
-	withTiming,
-	interpolate,
-	Easing,
-} from 'react-native-reanimated'
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolate } from 'react-native-reanimated'
 import * as ExpoSplashScreen from 'expo-splash-screen'
 import { LinearGradient } from 'expo-linear-gradient'
+import CONST from '@src/CONST'
 import useAssets from '@hooks/useAssets'
-
-const transitionConfig = {
-	duration: 1500,
-	easing: Easing.inOut(Easing.poly(3)),
-} as const
 
 const screen = Dimensions.get('screen')
 
 function SplashTransitioner({ isNavigationReady }: { isNavigationReady: boolean }) {
-	const [isExpoSplashVisible, setIsExpoSplashVisible] = useState(true)
-	const [transitionComplete, setTransitionComplete] = useState(false)
+	const [isSplashScreenReady, setSplashScreenReady] = useState(false)
 	const assets = useAssets()
 	const progress = useSharedValue(0)
 
@@ -35,28 +23,19 @@ function SplashTransitioner({ isNavigationReady }: { isNavigationReady: boolean 
 
 	/** Hide the native splash screen and initiate the exit animation. */
 	const onLoadEnd = useCallback(async () => {
-		try {
-			await ExpoSplashScreen.hideAsync()
-		} catch (e) {
-			console.warn(e)
-		} finally {
-			setIsExpoSplashVisible(false)
-		}
+		return ExpoSplashScreen.hideAsync()
+			.then(() => setSplashScreenReady(true))
+			.catch(console.warn)
 	}, [])
 
-	/** Start animation if tasks are done and children are ready. */
+	/** Start the animation if the navigation is ready and the expo splash screen has been hidden. */
 	useEffect(() => {
-		if (transitionComplete || !isNavigationReady || isExpoSplashVisible) {
+		if (!isNavigationReady || !isSplashScreenReady) {
 			return
 		}
-		progress.value = withTiming(1, transitionConfig, () => {
-			//runOnJS(setTransitionComplete)(true)
-		})
-	}, [isNavigationReady, isExpoSplashVisible])
-
-	if (transitionComplete) {
-		return null
-	}
+		progress.value = withTiming(1, CONST.ANIMATION.SPLASH_EXIT_TRANSITION)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isNavigationReady, isSplashScreenReady])
 
 	return (
 		<Animated.View
@@ -67,7 +46,8 @@ function SplashTransitioner({ isNavigationReady }: { isNavigationReady: boolean 
 			<Image
 				source={assets.icon}
 				onLoadEnd={onLoadEnd}
-				className='full resize-mode-contain'
+				className='full'
+				resizeMode='contain'
 				fadeDuration={0}
 			/>
 

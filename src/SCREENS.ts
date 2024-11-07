@@ -3,7 +3,7 @@
  * navigation. But there are situations where we may need to access screen names directly.
  */
 
-import { DeepValueOf, IsEqual } from './types/utils'
+import { DeepValueOf } from './types/utils'
 
 const PROTECTED_SCREENS = {
 	HOME: 'Home',
@@ -78,6 +78,7 @@ const SCREENS = {
 	LINK_MODAL: 'LinkModal',
 
 	/** catch-all screen */
+	NOT_FOUND: 'NotFound',
 } as const
 
 type Screen = DeepValueOf<typeof SCREENS>

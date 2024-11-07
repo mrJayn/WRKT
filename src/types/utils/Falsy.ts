@@ -10,5 +10,3 @@ JavaScript Truthy-Falsy Chart
 */
 
 type Falsy = false | 0 | '' | null | undefined
-
-export default Falsy

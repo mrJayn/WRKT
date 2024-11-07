@@ -1,23 +1,8 @@
-import ChildrenProps from './ChildrenProps'
-import DeepValueOf from './DeepValueOf'
-import Falsy from './Falsy'
-import ForeignKey from './ForeignKey'
-import IsEqual from './IsEqual'
-import PartialKeys from './PartialKeys'
-import ValueOf from './ValueOf'
-import Weekday, { WeekdayIndex } from './Weekday'
-
-type AnyObject = Record<string, any>
-
-// prettier-ignore
-export type {
-	AnyObject,
-	ChildrenProps,
-	DeepValueOf,
-	ForeignKey,
-	IsEqual,
-	PartialKeys,
-	ValueOf,
-	Weekday,
-	WeekdayIndex
-}
+export type { ChildrenProps } from './ChildrenProps'
+export type { DeepValueOf } from './DeepValueOf'
+export type { Either } from './Either'
+export type { ImmutableMap } from './ImmutableMap'
+export type { ImmutableRecord } from './ImmutableRecord'
+export type { IsEqual } from './IsEqual'
+export type { ValueOf } from './ValueOf'
+export type { Weekday } from './Weekday'

@@ -1,10 +1,8 @@
 /**
  * Rendered child component type.
  */
-import type { ReactNode } from 'react'
-
-type ChildrenProps = {
-	children: ReactNode
+export type ChildrenProps = {
+	children: React.ReactNode
 }
 
 export default ChildrenProps

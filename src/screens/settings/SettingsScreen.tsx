@@ -4,12 +4,13 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 //
 import SCREENS from '@src/SCREENS'
-import { SettingsStackParamList, TabsNavigatorParamList } from '@navigation/types'
-import { selectUser } from '@features/auth'
+import { TabsNavigatorParamList } from '@navigation/types'
 import { share_app } from '@utils/share'
-import DefaultButton, { DefaultButtonProps } from '@components/DefaultButton'
+import DefaultButton from '@components/DefaultButton'
 import ScreenWrapper from '@components/ScreenWrapper'
 import P from '@components/P'
+import { useGetUserQuery } from '@features/User/userAPI'
+import { IconName } from '@components/Icon'
 
 /*
 	Profile Screen
@@ -32,14 +33,21 @@ import P from '@components/P'
 		- Select/ unselect exercises
 	
 */
-type Props = StackScreenProps<TabsNavigatorParamList, typeof SCREENS.TABS.SETTINGS>
 
 const send_email = () => {
 	Linking.openURL('mailto:support@example.com?subject=SendMail&body=Description')
 }
 
-function SettingsScreen(props: Props) {
-	const user = useSelector(selectUser)
+type OptionsArray = Array<{ text: string; icon: IconName; onPress: () => void }>
+
+type SettingsScreenProps = StackScreenProps<TabsNavigatorParamList, typeof SCREENS.TABS.SETTINGS>
+
+function SettingsScreen(props: SettingsScreenProps) {
+	const { data: user } = useGetUserQuery()
+
+	if (!user) {
+		return
+	}
 
 	const goToSettings = () => console.log('[ SettingsScreen ] --> Settings')
 	const goToPreferences = () => console.log('[ SettingsScreen ] --> Preferences')
@@ -61,12 +69,12 @@ function SettingsScreen(props: Props) {
 		},
 		{ text: 'Share', icon: 'share-outline', onPress: share_app },
 		{ text: 'Contact', icon: 'mail-outline', onPress: send_email },
-	] as DefaultButtonProps[]
+	] as OptionsArray
 
 	return (
 		<ScreenWrapper>
 			<View className='h-32 justify-end'>
-				<P className='h2'>{user?.username || 'User'}</P>
+				<P className='h2'>{user.username || 'User'}</P>
 			</View>
 
 			<FlatList

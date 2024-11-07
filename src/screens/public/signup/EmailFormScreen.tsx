@@ -3,7 +3,7 @@ import { Controller } from 'react-hook-form'
 import ROUTES from '@src/ROUTES'
 import Navigation from '@navigation/Navigation'
 import { emailFormSchema } from '@libs/Schema'
-import { useValidateEmailMutation } from '@features/auth/authApi'
+import authApi from '@features/auth/authApi'
 import useYupForm from '@hooks/useYupForm'
 import FormTextInput from '@components/FormTextInput'
 import FormLayout from '@components/FormLayout'
@@ -11,7 +11,7 @@ import FormLayout from '@components/FormLayout'
 type ValidateEmailError = { message?: string } | undefined
 
 function RegisterWithEmailScreen() {
-	const [validateEmail, { isLoading, isSuccess, error }] = useValidateEmailMutation()
+	const [validateEmail, { isLoading, isSuccess, error }] = authApi.useValidateEmailMutation()
 	const errorText = (error as ValidateEmailError)?.message
 
 	const { control, handleSubmit, formState, trigger } = useYupForm({

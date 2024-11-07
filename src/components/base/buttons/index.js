@@ -31,7 +31,7 @@ export const BlockButton = ({ text, textStyle, ...props }) => {
 			>
 				<View>
 					<StyledText
-						tw='font-raleway-bold text-xl tracking-1'
+						tw='font-inter-bold text-xl tracking-1'
 						className={textStyle ?? ''}
 					>
 						{text}

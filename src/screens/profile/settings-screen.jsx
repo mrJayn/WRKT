@@ -2,17 +2,16 @@ import { useState } from 'react'
 import { View } from 'react-native'
 import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout } from '@features/auth'
-import { selectUser } from '@features/User'
 import { DefaultScreen, H, P, Button } from '@components/base'
 
 const SettingsScreen = ({ navigation }) => {
 	const dispatch = useDispatch()
-	const logoutUser = dispatch(logout)
+	// const logoutUser = dispatch(logout)
 
-	const { user } = useSelector(selectUser)
+	const user = undefined // useSelector(selectUser)
 
 	return
+
 	//
 	const [editsMade, setEditsMade] = useState(false)
 	// Textnput value states

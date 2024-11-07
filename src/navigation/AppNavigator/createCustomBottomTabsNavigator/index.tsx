@@ -1,19 +1,22 @@
 import React from 'react'
-import {
-	createNavigatorFactory,
-	useNavigationBuilder,
+import { View } from 'react-native'
+import { createNavigatorFactory, useNavigationBuilder, TabRouter } from '@react-navigation/native'
+import type {
 	DefaultNavigatorOptions,
 	ParamListBase,
-	TabRouter,
 	TabNavigationState,
 	TabRouterOptions,
 	TabActionHelpers,
 } from '@react-navigation/native'
-import { BottomTabNavigationOptions, BottomTabView, BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs'
-import { BottomTabNavigationConfig } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
+import { BottomTabView } from '@react-navigation/bottom-tabs'
+import type { BottomTabNavigationOptions, BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs'
+import type { BottomTabNavigationConfig } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
+import SCREENS from '@src/SCREENS'
+import type { NavigationStateRoute } from '@navigation/types'
+import ScreenWrapper from '@components/ScreenWrapper'
 import TabBar from './TabBar/TabBar'
 
-type Props = DefaultNavigatorOptions<
+type CustomBottomTabNavigatorProps = DefaultNavigatorOptions<
 	ParamListBase,
 	TabNavigationState<ParamListBase>,
 	BottomTabNavigationOptions,
@@ -24,6 +27,20 @@ type Props = DefaultNavigatorOptions<
 		initialRouteName: string
 	}
 
+function getStateToRender(state: TabNavigationState<ParamListBase>): TabNavigationState<ParamListBase> {
+	const routesToRender = [state.routes.at(-1)] as NavigationStateRoute[]
+
+	// Currently this value will be switched only after the first MAIN screen is rendered.
+	if (routesToRender[0].name !== SCREENS.TABS.MAIN) {
+		const routeToRender = state.routes.find((route) => route.name === SCREENS.TABS.MAIN)
+		if (routeToRender) {
+			routesToRender.unshift(routeToRender)
+		}
+	}
+
+	return { ...state, routes: routesToRender, index: routesToRender.length - 1 }
+}
+
 function CustomBottomTabNavigator({
 	id,
 	backBehavior = 'none',
@@ -31,7 +48,7 @@ function CustomBottomTabNavigator({
 	children,
 	screenOptions,
 	...props
-}: Props) {
+}: CustomBottomTabNavigatorProps) {
 	const { state, navigation, descriptors, NavigationContent } = useNavigationBuilder<
 		TabNavigationState<ParamListBase>,
 		TabRouterOptions,
@@ -47,16 +64,26 @@ function CustomBottomTabNavigator({
 		backBehavior: 'none',
 	})
 
+	const stateToRender = getStateToRender(state)
+
 	return (
-		<NavigationContent>
-			<BottomTabView
-				{...props}
-				tabBar={TabBar}
-				state={state}
-				navigation={navigation}
-				descriptors={descriptors}
-			/>
-		</NavigationContent>
+		<ScreenWrapper
+			testID={CustomBottomTabNavigator.displayName}
+			shouldShowOfflineIndicator={false}
+			shouldEnableKeyboardAvoidingView={false}
+		>
+			<View style={{ flex: 1 }}>
+				<NavigationContent>
+					<BottomTabView
+						{...props}
+						tabBar={TabBar}
+						state={state}
+						navigation={navigation}
+						descriptors={descriptors}
+					/>
+				</NavigationContent>
+			</View>
+		</ScreenWrapper>
 	)
 }
 

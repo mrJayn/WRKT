@@ -2,57 +2,13 @@ import { useState, useCallback, useLayoutEffect } from 'react'
 import { FlatList } from 'react-native-gesture-handler'
 import Animated, { FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
-import { Button, DefaultScreen } from '@components/base'
 import GenieEffectView from '@components/GenieEffectView'
 import { colors } from '@colors'
 import { useNavigation } from '@react-navigation/native'
 import { ActivityIndicator, Pressable, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const ListDetailScreen = ({ flatListProps }) => {
-	const { navigate } = useNavigation()
-	const [optionsMenu, setOptionsMenu] = useState(false)
-	const [updating, setUpdating] = useState(false)
-
-	const sv = useSharedValue(0)
-	const scrollHandler = (e) => {
-		const sy = e.nativeEvent.contentOffset.y
-		const threshold = 62.5
-		if ((sy > threshold && sv.value === 1) || (sy <= threshold && sv.value === 0)) return
-		if (sy > threshold && sv.value !== 1) sv.value = withTiming(1, { duration: 200 })
-		else if (sy <= threshold && sv.value !== 0) sv.value = withTiming(0, { duration: 200 })
-	}
-
-	const insets = useSafeAreaInsets()
-
-	return (
-		<DefaultScreen className=''>
-			<HeaderRight
-				onPress={() => setOptionsMenu(true)}
-				{...{ updating }}
-			/>
-			<FlatList
-				onScroll={scrollHandler}
-				contentContainerStyle={{
-					minHeight: '100%',
-					paddingTop: 100,
-					paddingRight: 15,
-					paddingBottom: 100,
-					marginTop: -insets.top,
-				}}
-				{...flatListProps}
-			/>
-			{optionsMenu && (
-				<Pressable
-					className='absolute inset-0 z-3'
-					onPress={() => setOptionsMenu(false)}
-				>
-					<OptionsMenu {...{ navigate }} />
-				</Pressable>
-			)}
-		</DefaultScreen>
-	)
-}
+import { Button, DefaultScreen } from '@components/base'
 
 const HeaderRight = ({ updating, onPress }) => (
 	<View className='absolute top-0 right-0 justify-center z-5'>
@@ -96,6 +52,51 @@ const OptionsMenu = ({ navigate }) => {
 				))}
 			</GenieEffectView>
 		</View>
+	)
+}
+
+function ListDetailScreen({ flatListProps }) {
+	const { navigate } = useNavigation()
+	const [optionsMenu, setOptionsMenu] = useState(false)
+	const [updating, setUpdating] = useState(false)
+
+	const sv = useSharedValue(0)
+	const scrollHandler = (e) => {
+		const sy = e.nativeEvent.contentOffset.y
+		const threshold = 62.5
+		if ((sy > threshold && sv.value === 1) || (sy <= threshold && sv.value === 0)) return
+		if (sy > threshold && sv.value !== 1) sv.value = withTiming(1, { duration: 200 })
+		else if (sy <= threshold && sv.value !== 0) sv.value = withTiming(0, { duration: 200 })
+	}
+
+	const insets = useSafeAreaInsets()
+
+	return (
+		<DefaultScreen className=''>
+			<HeaderRight
+				onPress={() => setOptionsMenu(true)}
+				{...{ updating }}
+			/>
+			<FlatList
+				onScroll={scrollHandler}
+				contentContainerStyle={{
+					minHeight: '100%',
+					paddingTop: 100,
+					paddingRight: 15,
+					paddingBottom: 100,
+					marginTop: -insets.top,
+				}}
+				{...flatListProps}
+			/>
+			{optionsMenu && (
+				<Pressable
+					className='absolute inset-0 z-3'
+					onPress={() => setOptionsMenu(false)}
+				>
+					<OptionsMenu {...{ navigate }} />
+				</Pressable>
+			)}
+		</DefaultScreen>
 	)
 }
 

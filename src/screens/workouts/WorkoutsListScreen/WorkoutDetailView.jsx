@@ -15,7 +15,7 @@
 // 	item: PropTypes.shape({
 // 		id: PropTypes.number.isRequired,
 // 		name: PropTypes.string.isRequired,
-// 		is_active: PropTypes.bool.isRequired,
+// 		isActive: PropTypes.bool.isRequired,
 // 		order: PropTypes.number.isRequired,
 // 	}).isRequired,
 

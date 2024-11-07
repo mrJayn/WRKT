@@ -1,14 +1,25 @@
+import CONST from '@src/CONST'
+import ROUTES from '@src/ROUTES'
+import type { Workout } from '@src/types/features'
 import API from '@features/API'
 import { providesList } from '../tagUtils'
-import type { EditableWorkout, Workout } from '@src/types/features'
+
+type EditableWorkout = Pick<Workout, 'id' | 'name' | 'isActive' | 'order'>
+
+const URLS = {
+	WORKOUTS: {
+		url: 'workouts/',
+		getDetailUrl: (pk: number | string) => `workouts/${pk}/`,
+	},
+}
 
 const workoutsApi = API.injectEndpoints({
 	endpoints: (builder) => ({
 		/**
-		 * List all workouts.
+		 * Get the workouts list for the current user.
 		 */
-		getWorkouts: builder.query<Workout[], void>({
-			query: () => ({ url: 'user/workouts/' }),
+		getWorkoutsList: builder.query<Workout[], void>({
+			query: () => ROUTES.WORKOUTS,
 			providesTags: (result) => providesList(result, 'Workout'),
 		}),
 
@@ -17,7 +28,7 @@ const workoutsApi = API.injectEndpoints({
 		 */
 		createWorkout: builder.mutation<Workout, void>({
 			query: () => ({
-				url: 'user/workouts/',
+				url: URLS.WORKOUTS.url,
 				method: 'POST',
 			}),
 			invalidatesTags: [{ type: 'Workout', id: 'LIST' }],
@@ -28,12 +39,12 @@ const workoutsApi = API.injectEndpoints({
 		 */
 		updateWorkout: builder.mutation<Workout | Workout[], EditableWorkout>({
 			query: ({ id, ...data }) => ({
-				url: `user/workouts/${id}/`,
+				url: URLS.WORKOUTS.getDetailUrl(id),
 				method: 'PATCH',
 				data,
 			}),
-			invalidatesTags: (result, error, { id, name, is_active }) =>
-				is_active
+			invalidatesTags: (result, error, { id, name, isActive }) =>
+				isActive
 					? [
 							{ type: 'Workout', id: 'LIST' },
 							{ type: 'ActiveDay', id: 'LIST' },
@@ -46,9 +57,9 @@ const workoutsApi = API.injectEndpoints({
 		 */
 		activateWorkout: builder.mutation<Workout[], EditableWorkout>({
 			query: ({ id }) => ({
-				url: `user/workouts/${id}/`,
+				url: URLS.WORKOUTS.getDetailUrl(id),
 				method: 'PATCH',
-				data: { is_active: true },
+				data: { isActive: true },
 			}),
 			invalidatesTags: (result, error, { id }) => [
 				{ type: 'Workout', id: 'LIST' },
@@ -61,7 +72,7 @@ const workoutsApi = API.injectEndpoints({
 		 */
 		deleteWorkout: builder.mutation<void, { id: number }>({
 			query: ({ id }) => ({
-				url: `user/workouts/${id}/`,
+				url: URLS.WORKOUTS.getDetailUrl(id),
 				method: 'DELETE',
 			}),
 			invalidatesTags: (result, error, arg) => [{ type: 'Workout', id: 'LIST' }],
@@ -72,7 +83,7 @@ const workoutsApi = API.injectEndpoints({
 export default workoutsApi
 
 export const {
-	useGetWorkoutsQuery,
+	useGetWorkoutsListQuery,
 	useCreateWorkoutMutation,
 	useUpdateWorkoutMutation,
 	useActivateWorkoutMutation,

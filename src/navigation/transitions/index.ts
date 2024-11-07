@@ -1,46 +1,25 @@
-import {
-	CardStyleInterpolators,
-	HeaderStyleInterpolators,
-	TransitionPreset,
-	TransitionPresets,
-	TransitionSpecs,
-} from '@react-navigation/stack'
+import { HeaderStyleInterpolators, TransitionPreset, TransitionPresets } from '@react-navigation/stack'
 import { forSlideInFadeOut, forSlideLeft, forSlideUp } from '../cardStyleInterpolators'
 import { forPopHeader } from '../headerStyleInterpolators'
-import { TransitionSpec } from '@react-navigation/stack/lib/typescript/src/types'
-import CONST from '@src/CONST'
+import { springTransitionSpec, smoothSpringTransitionSpec, timingTransitionSpec } from './transitionSpecs'
 
-const transitionSpec: TransitionSpec = {
-	animation: 'spring',
-	config: CONST.ANIMATION.SPRING_CONFIG,
-}
-
-export const defaultTransitionPreset: TransitionPreset = {
+const defaultTransitionPreset: TransitionPreset = {
 	...TransitionPresets.DefaultTransition,
-	transitionSpec: {
-		open: transitionSpec,
-		close: transitionSpec,
-	},
+	transitionSpec: springTransitionSpec,
 	cardStyleInterpolator: forSlideLeft,
 	headerStyleInterpolator: HeaderStyleInterpolators.forFade,
 }
 
-export const slideLeftTransitionPreset: TransitionPreset = {
+const slideLeftTransitionPreset: TransitionPreset = {
 	gestureDirection: 'horizontal',
-	transitionSpec: {
-		open: transitionSpec,
-		close: transitionSpec,
-	},
+	transitionSpec: springTransitionSpec,
 	cardStyleInterpolator: forSlideLeft,
 	headerStyleInterpolator: forPopHeader,
 }
 
-export const slideUpTransitionPreset: TransitionPreset = {
+const slideUpTransitionPreset: TransitionPreset = {
 	gestureDirection: 'vertical',
-	transitionSpec: {
-		open: transitionSpec,
-		close: transitionSpec,
-	},
+	transitionSpec: springTransitionSpec,
 	cardStyleInterpolator: forSlideUp,
 	headerStyleInterpolator: HeaderStyleInterpolators.forFade,
 }
@@ -50,3 +29,4 @@ export default {
 	slideLeft: slideLeftTransitionPreset,
 	slideUp: slideUpTransitionPreset,
 }
+export { defaultTransitionPreset, slideLeftTransitionPreset, slideUpTransitionPreset }

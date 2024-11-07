@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { colors } from '@colors'
 import DefaultButton from '../../components/DefaultButton'
-import { useCreateWorkoutMutation } from './workoutsApi'
+import { useCreateWorkoutMutation } from './workoutsAPI'
 import FadeView from '@components/FadeView'
 import { ActivityIndicator } from 'react-native'
 import { useEffect } from 'react'

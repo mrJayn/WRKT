@@ -1,38 +1,21 @@
+import { merge } from 'lodash'
 import { createSlice } from '@reduxjs/toolkit'
-import userActions from './actions'
-import type { RootState } from '@features/Store'
 import type { User } from '@src/types/features'
-
-type UserSliceState = {
-	data?: User
-}
-
-const initialState = {
-	data: undefined,
-} as UserSliceState
+import userAPI from './userAPI'
 
 const userSlice = createSlice({
 	name: 'user',
-	initialState,
+	initialState: {} as User,
 	reducers: {},
 	extraReducers: (builder) => {
-		// retrieve
-		builder
-			.addCase(userActions.retrieveUser.pending, (state) => {
-				//
-			})
-			.addCase(userActions.retrieveUser.fulfilled, (state, { payload }) => {
-				state.data = payload.data
-				//
-			})
-			.addCase(userActions.retrieveUser.rejected, (state, action) => {
-				//
-			})
+		builder.addMatcher(userAPI.endpoints.getUser.matchFulfilled, (state, action) => {
+			merge(state, action.payload)
+		})
+	},
+	selectors: {
+		selectUser: (state) => state,
 	},
 })
 
-export const { retrieveUser, updateUser } = userActions
-
-export const selectUser = (state: RootState) => state.user.data
-
+export const { selectUser } = userSlice.selectors
 export default userSlice

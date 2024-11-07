@@ -93,7 +93,7 @@ const Slide = ({ slide, scroll, index, starred, handleStar }) => {
 					onPress={onPress}
 					activeOpacity={1}
 				>
-					<P className='text-center font-raleway-medium text-xl'>{text}</P>
+					<P className='text-center font-inter-medium text-xl'>{text}</P>
 				</TouchableOpacity>
 			</View>
 		</Animated.View>

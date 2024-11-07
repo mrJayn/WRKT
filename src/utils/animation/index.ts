@@ -1,37 +1,23 @@
-import { withSpring as withRNRSpring, withTiming as withRNRTiming } from 'react-native-reanimated'
-import type {
-	AnimatableValue,
-	AnimationCallback,
-	WithSpringConfig,
-	WithTimingConfig,
-	Animation,
-	SpringAnimation,
-	TimingAnimation,
-} from 'react-native-reanimated'
+import type { AnimatableValue, AnimationCallback } from 'react-native-reanimated'
+import * as RNR from 'react-native-reanimated'
 
 import CONST from '@src/CONST'
 
-type withAnim<T extends SpringAnimation | TimingAnimation> = (
-	toValue: AnimatableValue,
-	callback?: AnimationCallback
-) => Animation<T>
+type WithTransitionType = <T extends AnimatableValue>(toValue: T, callback?: AnimationCallback) => T
 
-const withSpring: withAnim<SpringAnimation> = (toValue, callback) => {
+const withSpring: WithTransitionType = (toValue, callback) => {
 	'worklet'
-	let config = CONST.ANIMATION.SPRING_CONFIG as WithSpringConfig
-	return withRNRSpring(toValue, config, callback)
+	return RNR.withSpring(toValue, CONST.ANIMATION.SPRING_CONFIG, callback)
 }
 
-const withSmoothSpring: withAnim<SpringAnimation> = (toValue, callback) => {
+const withSmoothSpring: WithTransitionType = (toValue, callback) => {
 	'worklet'
-	let config = CONST.ANIMATION.SMOOTH_SPRING as WithSpringConfig
-	return withRNRSpring(toValue, config, callback)
+	return RNR.withSpring(toValue, CONST.ANIMATION.SMOOTH_SPRING, callback)
 }
 
-function withTiming<T extends AnimatableValue>(toValue: T, callback?: AnimationCallback): T {
+const withTiming: WithTransitionType = (toValue, callback) => {
 	'worklet'
-	let timingConfig = CONST.ANIMATION.TIMING_CONFIG as WithTimingConfig
-	return withRNRTiming(toValue, timingConfig, callback)
+	return RNR.withTiming(toValue, CONST.ANIMATION.TIMING_CONFIG, callback)
 }
 
-export { withSpring, withSmoothSpring, withTiming }
+export { withSpring }

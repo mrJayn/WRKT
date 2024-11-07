@@ -1,36 +1,34 @@
-import React, { Dispatch, SetStateAction, useRef, useEffect } from 'react'
-import { FlatList, ListRenderItem } from 'react-native'
+import React, { useRef, useEffect } from 'react'
+import { FlatList } from 'react-native'
+import type { ListRenderItem } from 'react-native'
 import Animated, { SharedValue, interpolate, useAnimatedStyle } from 'react-native-reanimated'
-//
-import type { WeekdayIndex } from '@src/types/utils'
-import P from '@components/P'
+import type { Weekday } from '@src/types/utils'
 import DefaultButton from '@components/DefaultButton'
-
-type ScrollResponsiveHeaderProps = {
-	title: string
-	subtitle: string
-	dayNames: string[]
-	scrollY: SharedValue<number>
-	displayDayNum: WeekdayIndex
-	setDisplayDayNum: Dispatch<SetStateAction<WeekdayIndex>>
-}
+import P from '@components/P'
 
 const HEADER_HEIGHT = 200
 const TITLE_HEIGHT = 60
 const SUBTITLE_HEIGHT = 22
+//
+const scrollY1 = HEADER_HEIGHT - TITLE_HEIGHT
+const textScrollY0 = scrollY1 - SUBTITLE_HEIGHT
+
+type ScrollResponsiveHeaderProps = {
+	dayNames: readonly string[]
+	numExercises?: number
+	scrollY: SharedValue<number>
+	displayDayNum: Weekday
+	setDisplayDayNum: React.Dispatch<React.SetStateAction<Weekday>>
+}
 
 function ScrollResponsiveHeader({
-	title,
-	subtitle,
 	dayNames,
+	numExercises = 0,
 	scrollY,
 	displayDayNum,
 	setDisplayDayNum,
 }: ScrollResponsiveHeaderProps) {
 	const flatlistRef = useRef<FlatList<string> | null>(null)
-
-	const scrollY1 = HEADER_HEIGHT - TITLE_HEIGHT
-	const textScrollY0 = scrollY1 - SUBTITLE_HEIGHT
 
 	const headerContainerStyle = useAnimatedStyle(() => ({
 		transform: [
@@ -56,6 +54,9 @@ function ScrollResponsiveHeader({
 	}))
 
 	const scrollToDayNameIndex = (index: number) => {
+		if (!dayNames.length) {
+			return
+		}
 		flatlistRef?.current?.scrollToIndex({
 			animated: true,
 			index: index,
@@ -66,19 +67,18 @@ function ScrollResponsiveHeader({
 	const dayNamesRenderItem: ListRenderItem<string> = ({ item, index }) => {
 		let isSelected = index === displayDayNum
 
-		const handlePress = () => {
-			if (!isSelected) {
-				setDisplayDayNum(index)
-				scrollToDayNameIndex(index)
-			}
-		}
-
 		return (
 			<DefaultButton
 				text={item}
 				variant='grey'
 				className={isSelected ? 'bg-white/25' : ''}
-				onPress={handlePress}
+				onPress={() => {
+					if (!isSelected) {
+						setDisplayDayNum(index as Weekday)
+						scrollToDayNameIndex(index)
+					}
+				}}
+				activeOpacity={isSelected ? 1 : 0.5}
 			/>
 		)
 	}
@@ -121,18 +121,18 @@ function ScrollResponsiveHeader({
 			/>
 
 			<Animated.View
-				className='flex-1 px-3 justify-end'
+				className='flex-1 px-2 justify-end'
 				style={[titlesContainerStyle]}
 			>
 				<P className='h-12 text-4xl font-inter-semibold text-tint-primary-light dark:text-tint-primary-dark'>
-					{title}
+					{dayNames[displayDayNum]}
 				</P>
 
 				<Animated.Text
 					className='h-5 mt-1 pl-2 pb-2 text-lg font-inter-regular text-tint-secondary-light dark:text-tint-secondary-dark'
 					style={[subtitleTextStyle]}
 				>
-					{subtitle}
+					{`${numExercises} total exercises.`}
 				</Animated.Text>
 			</Animated.View>
 		</Animated.View>

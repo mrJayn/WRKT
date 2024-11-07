@@ -1,36 +1,38 @@
 import type CONST from '@src/CONST'
 import { ValueOf } from '@src/types/utils'
+import { colors } from '../colors'
+import linearGradients from '@styles/linearGradients'
 
-type Color = string
+// type BaseColorKey = { [K in keyof  typeof colors]-?:  typeof colors[K] extends string ? K : never }[keyof  typeof colors]
 
 type ThemePreference = ValueOf<typeof CONST.THEME>
 
 type ThemeName = Exclude<ThemePreference, typeof CONST.THEME.SYSTEM>
 
 type ThemeColors = {
-	bg: {
-		primary: Color
-		secondary: Color
-		tertiary: Color
+	primary: string
+	secondary: string
+	tertiary: string
+	tint: {
+		primary: string
+		secondary: string
+		tertiary: string
+		title: string
+		selection: string
+		nav: string
+		success: string
+		error: string
+		warning: string
 	}
-	text: {
-		primary: Color
-		secondary: Color
-		tertiary: Color
-
-		heading: Color
-		nav: Color
-
-		success: Color
-		error: Color
-		warning: Color
-	}
-	//
-	separator: Color
-	//
-	white: Color
-	black: Color
-	transparent: Color
+	separator: string
 }
 
-export type { ThemePreference, ThemeName, ThemeColors, Color }
+type Theme = ThemeColors & {
+	/** Current theme type ( e.g. "dark" | "light" ) */
+	type: ThemeName
+
+	/** Themed linear gradient color arrays. */
+	linearGradients: Record<keyof typeof linearGradients, string[]>
+} & Omit<typeof colors, keyof ThemeColors>
+
+export type { Theme, ThemePreference, ThemeName }

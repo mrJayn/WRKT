@@ -1,41 +1,37 @@
-import { KeyboardAvoidingViewProps, Platform, KeyboardAvoidingView as RNKeyboardAvoidingView, ViewProps } from 'react-native'
-import Animated, { useAnimatedKeyboard, useAnimatedStyle } from 'react-native-reanimated'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { ChildrenProps } from '@src/types/utils'
+import type { ViewProps } from 'react-native'
+import { Platform } from 'react-native'
+import { KeyboardAvoidingView as RNKeyboardAvoidingView } from 'react-native'
 
-function _KeyboardAvoidingView({ children }: ChildrenProps) {
-	const insets = useSafeAreaInsets()
-	const keyboard = useAnimatedKeyboard()
+type KeyboardAvoidingViewProps = ViewProps & {
+	/** The distance between the top of the device screen and the RN view.*/
+	keyboardVerticalOffset?: number | undefined
 
-	const avoidKeyboardStyle = useAnimatedStyle(() => {
-		let lowerMax = keyboard.height.value + 50,
-			lowerMin = keyboard.height.value - insets.bottom
-
-		return { paddingBottom: Math.max(0, Math.min(lowerMax, lowerMin)) }
-	})
-
-	return <Animated.View style={[{ flex: 1 }, avoidKeyboardStyle]}>{children}</Animated.View>
+	/** Enables or disables the KeyboardAvoidingView. */
+	enabled?: boolean | undefined
 }
 
-interface Props extends ViewProps {
-	enabled?: boolean
-	offset?: number
-}
-
-function KeyboardAvoidingView({ enabled, offset, style, children, ...props }: Props) {
+function KeyboardAvoidingView({
+	enabled = true,
+	keyboardVerticalOffset = 0,
+	style,
+	children,
+	...rest
+}: KeyboardAvoidingViewProps) {
 	const behaivor = Platform.OS === 'ios' ? 'padding' : 'height'
 
 	return (
 		<RNKeyboardAvoidingView
 			behavior={behaivor}
 			enabled={enabled}
-			keyboardVerticalOffset={offset}
+			keyboardVerticalOffset={keyboardVerticalOffset}
 			style={[{ flex: 1 }, style]}
-			{...props}
+			{...rest}
 		>
 			{children}
 		</RNKeyboardAvoidingView>
 	)
 }
+
+KeyboardAvoidingView.displayName = 'KeyboardAvoidingView'
 
 export default KeyboardAvoidingView

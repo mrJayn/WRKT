@@ -1,12 +1,11 @@
-import DefaultButton, { DefaultButtonProps } from '@components/DefaultButton'
 import CONST from '@src/CONST'
-
-type LinkableSocials = 'Google' | 'Facebook' | 'Apple'
+import DefaultButton from '@components/DefaultButton'
+import type { IconName } from '@components/Icon'
 
 type SignInButtonBaseProps = {
 	text?: string
-	icon?: DefaultButtonProps['icon']
-	onPress: DefaultButtonProps['onPress']
+	icon?: IconName
+	onPress: () => void
 }
 
 function SignInButtonBase({ text, icon, onPress }: SignInButtonBaseProps) {

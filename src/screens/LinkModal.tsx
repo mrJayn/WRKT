@@ -7,7 +7,7 @@ import { RootStackScreenProps } from '@navigation/types'
 import SCREENS from '@src/SCREENS'
 import { getFocusedRouteNameFromRoute, getStateFromPath } from '@react-navigation/native'
 import Navigation from '@navigation/Navigation'
-import usePreferredTheme from '@hooks/useColorScheme'
+import useThemePreference from '@hooks/useThemePreference'
 import { BlurView } from 'expo-blur'
 import Heading from '@components/Heading'
 
@@ -28,7 +28,7 @@ function LinkModal({
 }: RootStackScreenProps<typeof SCREENS.LINK_MODAL>) {
 	const { title, subtitle, label } = linkModalTypes[linkTo]
 
-	const colorScheme = usePreferredTheme()
+	const colorScheme = useThemePreference()
 
 	const dismissModal = () => {
 		Navigation.goBack()

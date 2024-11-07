@@ -1,5 +1,5 @@
-import _ from 'underscore'
-import { validateUnique } from '@api/auth'
+import { debounce } from 'underscore'
+import axiosClient from '@features/API/axiosClient'
 
 /** - Usage -
  ```
@@ -7,6 +7,15 @@ import { validateUnique } from '@api/auth'
     
  ```
  */
+
+async function validateUnique(path, value) {
+	try {
+		const response = await axiosClient.post(`validate-unique/${path}/`, { value })
+		return Boolean(response.data?.isUnique)
+	} catch (e) {
+		return false
+	}
+}
 
 class AsyncUniqueValidation {
 	constructor() {
@@ -17,7 +26,7 @@ class AsyncUniqueValidation {
 	isInputUnique = () => this.isUnique
 	isLoading = () => this.loading
 
-	validateInput = _.debounce(async (value, triggerValidation) => {
+	validateInput = debounce(async (value, triggerValidation) => {
 		this.loading = true
 		this.isUnique = await validateUnique('email', value)
 		console.log('validated from API')

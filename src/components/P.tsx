@@ -1,16 +1,29 @@
+import type { ReactNode } from 'react'
 import { Text as RNText, type TextProps } from 'react-native'
 import { styled } from 'nativewind'
 
 const StyledText = styled(RNText, `font-inter-regular text-base text-tint-primary-light dark:text-tint-primary-dark`)
 
-function P({ allowFontScaling = false, suppressHighlighting = true, children, ...props }: TextProps) {
+type PProps = TextProps &
+	(
+		| {
+				children?: ReactNode | undefined
+				text?: undefined
+		  }
+		| {
+				children?: undefined
+				text: ReactNode
+		  }
+	)
+
+function P({ allowFontScaling = false, suppressHighlighting = true, children, text, ...props }: PProps) {
 	return (
 		<StyledText
 			allowFontScaling={allowFontScaling}
 			suppressHighlighting={suppressHighlighting}
 			{...props}
 		>
-			{children}
+			{children ?? text ?? undefined}
 		</StyledText>
 	)
 }
@@ -18,3 +31,4 @@ function P({ allowFontScaling = false, suppressHighlighting = true, children, ..
 P.displayName = 'Text'
 
 export default P
+export type { PProps }

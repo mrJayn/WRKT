@@ -10,35 +10,41 @@ import SettingsScreen from '@src/screens/settings/SettingsScreen'
 import ActiveRouteContext from './ActiveRouteContext'
 import TabBar from './TabBar'
 
-const Tabs = createBottomTabNavigator<TabsNavigatorParamList>()
+const Tab = createBottomTabNavigator<TabsNavigatorParamList>()
 
 function TabsNavigator() {
 	const activeRoute = useNavigationState(getTopmostTabRoute)
 
 	return (
-		<Tabs.Navigator
+		<Tab.Navigator
 			id='tabs-navigator'
 			tabBar={TabBar}
 			screenOptions={{ headerShown: false }}
 		>
-			<Tabs.Screen
+			<Tab.Screen
+				// Days List ( active workout )  +  Exercises List ( selected day )
 				name={SCREENS.TABS.MAIN}
 				component={DisplayScreen}
 			/>
-			<Tabs.Screen
+			<Tab.Screen
+				// Workouts List
 				name={SCREENS.TABS.WORKOUTS}
 				component={WorkoutsListScreen}
 			/>
-			<Tabs.Screen
+			<Tab.Screen
+				// Programs List
 				name={SCREENS.TABS.PROGRAMS}
 				component={ProgramsListScreen}
 			/>
-			<Tabs.Screen
+			<Tab.Screen
+				// User
 				name={SCREENS.TABS.SETTINGS}
 				component={SettingsScreen}
 			/>
-		</Tabs.Navigator>
+		</Tab.Navigator>
 	)
 }
+
+TabsNavigator.displayName = 'TabsNavigator'
 
 export default TabsNavigator

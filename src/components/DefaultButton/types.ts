@@ -1,7 +1,7 @@
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import type { ViewProps } from 'react-native'
+import type { TouchableOpacityProps } from 'react-native-gesture-handler'
+import type { Route } from '@src/ROUTES'
 import type { IconName } from '@components/Icon'
-import { GestureResponderEvent, ViewProps } from 'react-native'
-import { Route } from '@src/ROUTES'
 
 enum ButtonVariant {
 	grey = 'grey',
@@ -36,7 +36,7 @@ type CustomButtonProps = {
 
 type ButtonActionProps =
 	| {
-			onPress?: TouchableOpacity['props']['onPress']
+			onPress?: (() => void) | undefined
 			linkTo?: undefined
 			linkToType?: undefined
 	  }
@@ -46,8 +46,7 @@ type ButtonActionProps =
 			linkToType?: string | undefined
 	  }
 
-type DefaultButtonProps = TouchableOpacity['props'] & CustomButtonProps & ButtonActionProps
+type DefaultButtonProps = TouchableOpacityProps & CustomButtonProps & ButtonActionProps
 
-export default DefaultButtonProps
 export type { ButtonVariantName, DefaultButtonProps }
 export { ButtonVariant }

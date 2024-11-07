@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { withSpring } from '@utils/animation'
-import CONST from '@src/CONST'
 
 type TextInputLabelProps = {
 	/** Label text to display. */

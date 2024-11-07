@@ -1,18 +1,31 @@
-import ValueOf from './ValueOf'
+import type { ValueOf } from './ValueOf'
 
-enum Weekday {
-	Sunday,
-	Monday,
-	Tuesday,
-	Weday,
-	Thurday,
-	Friday,
-	Saturday,
-}
+type FirstThreeChars<S> = S extends `${infer A}${infer B}${infer C}${string}` ? `${A}${B}${C}` : never
 
-type WeekdayIndex = ValueOf<typeof Weekday>
-// type WeekdayIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6
+// enum WeekdayValues {
+// 	Sunday,
+// 	Monday,
+// 	Tuesday,
+// 	Wednesday,
+// 	Thurday,
+// 	Friday,
+// 	Saturday,
+// }
 
-export default Weekday
+const WeekdayValuesMap = {
+	Sunday: 0,
+	Monday: 1,
+	Tuesday: 2,
+	Wednesday: 3,
+	Thurday: 4,
+	Friday: 5,
+	Saturday: 6,
+} as const
 
-export type { WeekdayIndex }
+type Weekday = ValueOf<typeof WeekdayValuesMap>
+
+type WeekdayName = keyof typeof WeekdayValuesMap
+
+type WeekdayShortName = FirstThreeChars<WeekdayName>
+
+export type { Weekday, WeekdayName, WeekdayShortName }

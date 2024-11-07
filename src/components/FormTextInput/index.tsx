@@ -6,7 +6,7 @@ import { useSharedValue } from 'react-native-reanimated'
 import { colors } from '@colors'
 import getSecureEntryKeyboardType from '@libs/getSecureEntryKeyboardType'
 import getAutoCompleteContentTypeProps from '@libs/getAutoCompleteContentTypeProps'
-import usePreferredTheme from '@hooks/useColorScheme'
+import useThemePreference from '@hooks/useThemePreference'
 import DefaultButton from '@components/DefaultButton'
 import P from '@components/P'
 import TextInputBottomBorder from './TextInputBottomBorder'
@@ -54,7 +54,7 @@ const FormTextInput = (
 	const [passwordHidden, setPasswordHidden] = useState(secureTextEntry)
 
 	const navigation = useNavigation()
-	const colorScheme = usePreferredTheme()
+	const colorScheme = useThemePreference()
 	const isLabelActiveSV = useSharedValue(initialActiveLabel)
 	const focusSV = useSharedValue(false) // autoFocus
 
@@ -94,6 +94,7 @@ const FormTextInput = (
 			return
 		}
 		isLabelActiveSV.value = isLabelActive
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasValue, isFocused, forceLabelActive])
 
 	/**  Update the `hasValueRef` if `value` is cleared externally.  */
@@ -120,6 +121,8 @@ const FormTextInput = (
 		})
 
 		return unsubscribe
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [navigation])
 
 	return (

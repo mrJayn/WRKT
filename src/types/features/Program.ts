@@ -1,13 +1,12 @@
-import ForeignKey from '../utils/ForeignKey'
+import { Week } from './ProgramTypes'
 
-type Program = {
-	profile: ForeignKey
-	id: number
+export type Program = {
+	id: number // pk
+	profile: number // fk
 	name: string
 	startdate: string
 	duration: number
 	active: boolean
 	order: number
+	weeks?: ReadonlyArray<Week>
 }
-
-export default Program

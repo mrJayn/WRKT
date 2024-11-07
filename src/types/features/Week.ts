@@ -1,9 +1,8 @@
-import ForeignKey from '../utils/ForeignKey'
+import { Exercise } from './Exercises'
 
-type Week = {
-	id: number
-	program: ForeignKey
+export type Week = {
+	id: number // pk
+	program: number // fk
 	week_id: number
+	exercises?: ReadonlyArray<Exercise>
 }
-
-export default Week

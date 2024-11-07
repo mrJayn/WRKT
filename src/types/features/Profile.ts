@@ -1,15 +1,23 @@
-import { ForeignKey, WeekdayIndex } from '../utils'
+import type { ThemePreference } from '@styles/theme/types'
+import type { Weekday } from '../utils'
 
 type WeightUnits = 'lbs' | 'kgs'
 
 type Profile = {
-	id: number
-	user: ForeignKey
-	notifications: boolean
-	day_one_wkday: WeekdayIndex
-	units: WeightUnits
+	/** The id of the current profile. */
+	id?: number
+
+	/** Indicates if push notifications are enabled. */
+	notifications?: boolean
+
+	/** The day index of the week that the week should start on.  */
+	dayOneWkday?: Weekday
+
+	/** The units of weight measurement. */
+	units?: WeightUnits
+
+	/** The preferred theme. Defaults to system. */
+	theme?: ThemePreference
 }
 
-export default Profile
-
-export type { Profile, WeightUnits }
+export type { WeightUnits, Profile }

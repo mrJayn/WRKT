@@ -71,7 +71,7 @@ AnimatedLabel.propTypes = {
 function AnimatedLabel({ text, style }) {
 	return (
 		<Animated.Text
-			className='absolute top-[8px] z-1 font-raleway-bold text-sm'
+			className='absolute top-[8px] z-1 font-inter-bold text-sm'
 			pointerEvents='none'
 			style={style}
 		>

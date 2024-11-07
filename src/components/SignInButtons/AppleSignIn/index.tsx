@@ -1,4 +1,3 @@
-import { View } from 'react-native'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import SignInButtonBase from '../SignUpButtonBase'
 
@@ -28,17 +27,17 @@ function AppleSignIn() {
 		/>
 	)
 
-	return (
-		<View className='border-2 border-separator-dark rounded-full'>
-			<AppleAuthentication.AppleAuthenticationButton
-				buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
-				buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-				className='h-9 w-full'
-				cornerRadius={999}
-				onPress={handlePress}
-			/>
-		</View>
-	)
+	// return (
+	// 	<View className='border-2 border-separator-dark rounded-full'>
+	// 		<AppleAuthentication.AppleAuthenticationButton
+	// 			buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
+	// 			buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+	// 			className='h-9 w-full'
+	// 			cornerRadius={999}
+	// 			onPress={handlePress}
+	// 		/>
+	// 	</View>
+	// )
 }
 
 AppleSignIn.displayName = 'AppleSignIn'

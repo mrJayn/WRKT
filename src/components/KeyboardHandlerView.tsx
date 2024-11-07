@@ -1,11 +1,11 @@
-import React from 'react'
-import { Keyboard, TouchableWithoutFeedback, TouchableNativeFeedbackProps } from 'react-native'
+import { Keyboard, TouchableWithoutFeedback } from 'react-native'
+import type { TouchableNativeFeedbackProps } from 'react-native'
 
-export type KeyboardHandlerViewProps = TouchableNativeFeedbackProps & {
+type KeyboardHandlerViewProps = TouchableNativeFeedbackProps & {
 	keyboardHandlingEnabled?: boolean | undefined
 }
 
-function KeyboardHandlerView({ keyboardHandlingEnabled = false, children, ...props }: KeyboardHandlerViewProps) {
+function KeyboardHandlerView({ keyboardHandlingEnabled = true, children, ...props }: KeyboardHandlerViewProps) {
 	return (
 		<TouchableWithoutFeedback
 			{...props}

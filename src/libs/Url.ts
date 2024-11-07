@@ -41,4 +41,8 @@ function hasSameExpensifyOrigin(url1: string, url2: string): boolean {
 	}
 }
 
-export { addTrailingForwardSlash, hasSameExpensifyOrigin, getPathFromURL }
+export {
+	addTrailingForwardSlash,
+	//hasSameExpensifyOrigin,
+	//getPathFromURL,
+}

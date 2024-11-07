@@ -1,22 +1,29 @@
+import type { ViewProps } from 'react-native'
 import { StyleSheet } from 'react-native'
-import { LinearGradient, type LinearGradientProps } from 'expo-linear-gradient'
-import { useColorScheme } from 'nativewind'
-import linearGradients, { GradientColorsKey } from '@styles/linearGradients'
+import { LinearGradient } from 'expo-linear-gradient'
+import type { Theme } from '@styles/theme/types'
+import useTheme from '@hooks/useTheme'
 
-interface LinearGradientViewProps extends Partial<LinearGradientProps> {
-	name?: GradientColorsKey
+type LinearGradientViewProps = ViewProps & {
+	name: keyof Theme['linearGradients']
 }
 
-function LinearGradientBackground({ name, colors, ...props }: LinearGradientViewProps) {
-	const { colorScheme } = useColorScheme()
+function LinearGradientView({ name, style, ...rest }: LinearGradientViewProps) {
+	const { linearGradients } = useTheme()
 
 	return (
 		<LinearGradient
-			colors={colors || linearGradients[name || 'primary'][colorScheme || 'dark']}
-			style={[StyleSheet.absoluteFill]}
-			{...props}
+			colors={linearGradients[name]}
+			locations={undefined}
+			start={undefined}
+			end={undefined}
+			dither={true}
+			style={[StyleSheet.absoluteFill, style]}
+			{...rest}
 		/>
 	)
 }
 
-export default LinearGradientBackground
+LinearGradientView.displayName = 'LinearGradientView'
+
+export default LinearGradientView

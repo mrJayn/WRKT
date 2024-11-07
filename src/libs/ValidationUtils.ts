@@ -1,7 +1,6 @@
 import { addYears, isAfter, isBefore, isValid, startOfDay, subYears } from 'date-fns'
 import { debounce } from 'lodash'
 import CONST from '@src/CONST'
-import { validateUnique } from '@api/auth'
 
 /**
  * Validate date fields
@@ -55,19 +54,19 @@ function isValidPersonName(value: string) {
 /**
  * Checks if the provided string includes any of the provided reserved words
  */
-function doesContainReservedWord(value: string, reservedWords: string[]): boolean {
-	const valueToCheck = value.trim().toLowerCase()
-	return reservedWords.some((reservedWord) => valueToCheck.includes(reservedWord.toLowerCase()))
-}
+// function doesContainReservedWord(value: string, reservedWords: string[]): boolean {
+// 	const valueToCheck = value.trim().toLowerCase()
+// 	return reservedWords.some((reservedWord) => valueToCheck.includes(reservedWord.toLowerCase()))
+// }
 
-const validateUniqueWithDebounce = debounce(validateUnique, 500, { leading: true })
+// const validateUniqueWithDebounce = debounce(validateUnique, 500, { leading: true })
 
 /**
  * Method to check if a user attribute is unique among all users.
  */
-async function isUserFieldUnique(field: string, value: string) {
-	return Boolean(await validateUniqueWithDebounce(field, value))
-}
+// async function isUserFieldUnique(field: string, value: string) {
+// 	return Boolean(await validateUniqueWithDebounce(field, value))
+// }
 
 export {
 	isValidDate,
@@ -75,6 +74,5 @@ export {
 	isValidUsername,
 	isValidLegalName,
 	isValidPersonName,
-	doesContainReservedWord,
 	//
 }

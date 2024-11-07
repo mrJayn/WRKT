@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Controller } from 'react-hook-form'
 import { StackScreenProps } from '@react-navigation/stack'
 import SCREENS from '@src/SCREENS'
@@ -12,7 +12,7 @@ import FormLayout from '@components/FormLayout'
 type Props = StackScreenProps<RegisterStackParamList, typeof SCREENS.REGISTER.CREATE_USERNAME>
 
 function CreateUsernameScreen({ route }: Props) {
-	const [registerUser, { isLoading, isSuccess }] = useRegisterMutation()
+	const [register, { isLoading, isSuccess, isError }] = useRegisterMutation()
 
 	const { control, handleSubmit, formState } = useYupForm({
 		schema: createProfileSchema,
@@ -21,7 +21,7 @@ function CreateUsernameScreen({ route }: Props) {
 
 	const submit = handleSubmit(async ({ username }) => {
 		try {
-			await registerUser({
+			await register({
 				...route.params,
 				username,
 			}).unwrap()

@@ -1,19 +1,40 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { View } from 'react-native'
+import { RefreshControl } from 'react-native-gesture-handler'
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
-import ROUTES from '@src/ROUTES'
-import type { WeekdayIndex } from '@src/types/utils'
-import withActiveWorkoutDays, { WithActiveWorkoutDaysProps } from '@components/withActiveWorkoutDays'
-import P from '@components/P'
-import DefaultButton from '@components/DefaultButton'
-import Heading from '@components/Heading'
-import ExercisesList from './ExercisesList'
-import ScrollResponsiveHeader from './ScrollResponsiveHeader'
+
+import CONST from '@src/CONST'
+import SCREENS from '@src/SCREENS'
+import type { Weekday } from '@src/types/utils'
+import type { TabsNavigatorScreenProps } from '@navigation/types'
+import { useGetActiveWorkoutDaysQuery } from '@features/Days/daysApi'
+import { useGetWorkoutExercisesQuery } from '@features/Exercises/exercisesApi'
 import ScreenWrapper from '@components/ScreenWrapper'
 
-function DisplayScreen({ data, units }: WithActiveWorkoutDaysProps) {
-	const [displayDayNum, setDisplayDayNum] = useState<WeekdayIndex>(new Date().getDay())
+import ExercisesList from './ExercisesList'
+import ScrollResponsiveHeader from './ScrollResponsiveHeader'
+
+type DisplayScreenProps = TabsNavigatorScreenProps<typeof SCREENS.TABS.MAIN>
+
+function DisplayScreen(props: DisplayScreenProps) {
+	// console.log('[DisplayScreen]')
+	const [displayDayNum, setDisplayDayNum] = useState(new Date().getDay() as Weekday)
+	const [refreshing, setRefreshing] = useState(false)
 	const scrollY = useSharedValue(0)
+
+	const { days, refetch: refetchDays } = useGetActiveWorkoutDaysQuery(undefined, {
+		selectFromResult: ({ data }) => ({ days: data }),
+	})
+	const { data: exercises, refetch: refetchExericises } = useGetWorkoutExercisesQuery('active')
+
+	const displayDay = useMemo(() => days?.find((day) => day.dayIndex === displayDayNum), [days, displayDayNum])
+
+	const dayNames = useMemo(() => days?.map((day) => day.name) ?? CONST.FALLBACK_DISPLAY_DAY_LABELS, [days])
+
+	const displayExercisesCount = useMemo(
+		() => exercises?.filter(({ day }) => day === displayDay?.id).length ?? 0,
+		[displayDay]
+	)
 
 	const scrollHandler = useAnimatedScrollHandler({
 		onScroll: (event) => {
@@ -21,19 +42,24 @@ function DisplayScreen({ data, units }: WithActiveWorkoutDaysProps) {
 		},
 	})
 
-	const { name, exercises } = useMemo(() => data[displayDayNum], [displayDayNum])
-
-	const dayNames = useMemo(() => data.map((item, index) => item.name || `Day ${index}`), [data])
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true)
+		await refetchDays().unwrap()
+		await refetchExericises().unwrap()
+		setTimeout(() => {
+			setRefreshing(false)
+		}, 250)
+	}, [])
 
 	return (
 		<ScreenWrapper
-			mode='margin'
-			edges={['top']}
+			safeAreaMode='margin'
+			safeAreaEdges={['top']}
+			shouldQueryTriggerLoading={true}
 		>
 			<ScrollResponsiveHeader
-				title={name || `Day ${displayDayNum}`}
-				subtitle={`${exercises.length} total exercises`}
 				dayNames={dayNames}
+				numExercises={displayExercisesCount}
 				scrollY={scrollY}
 				displayDayNum={displayDayNum}
 				setDisplayDayNum={setDisplayDayNum}
@@ -46,24 +72,15 @@ function DisplayScreen({ data, units }: WithActiveWorkoutDaysProps) {
 				scrollEventThrottle={1}
 				scrollsToTop={true}
 				showsVerticalScrollIndicator={false}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+					/>
+				}
 			>
 				<View className='mt-48 mb-40 p-3'>
-					{!!exercises.length ? (
-						<ExercisesList
-							data={exercises}
-							units={units}
-						/>
-					) : (
-						<View className='w-full centered'>
-							<P className='mt-2 mb-6'>Looks like there's nothing here yet!</P>
-							<DefaultButton
-								text='Go to Workouts'
-								variant='filled'
-								linkTo={ROUTES.WORKOUTS}
-								className='bg-darkgreen-neon'
-							/>
-						</View>
-					)}
+					<ExercisesList dayID={displayDay?.id} />
 				</View>
 			</Animated.ScrollView>
 		</ScreenWrapper>
@@ -72,4 +89,4 @@ function DisplayScreen({ data, units }: WithActiveWorkoutDaysProps) {
 
 DisplayScreen.displayName = 'DisplayScreen'
 
-export default withActiveWorkoutDays(DisplayScreen)
+export default DisplayScreen

@@ -27,7 +27,7 @@ export default function Input({
 		<View className={`w-full mb-2 ${errors ? '' : ''}`}>
 			<P className='ml-px mb-px capitalize text-tint-secondary-light dark:text-tint-tertiary-dark'>{label}</P>
 			<TextInput
-				className='w-full py-5 px-3 text-base font-raleway text-tint-light dark:text-tint-dark bg-grey-15 dark:bg-grey-95'
+				className='w-full py-5 px-3 text-base font-inter-regular text-tint-light dark:text-tint-dark bg-grey-15 dark:bg-grey-95'
 				placeholderTextColor='#fff8'
 				autoCapitalize={'none'}
 				onFocus={() => {

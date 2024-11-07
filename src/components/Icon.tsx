@@ -1,31 +1,33 @@
 import React from 'react'
 import type { TextProps } from 'react-native'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
-import { useColorScheme } from 'nativewind'
-import { colors } from '@colors'
+import useTheme from '@hooks/useTheme'
 
-type IconType = typeof Ionicons | typeof MaterialCommunityIcons
+type IconSet = typeof Ionicons | typeof MaterialCommunityIcons
 
 type IonIconName = keyof typeof Ionicons.glyphMap
-
 type MaterialCommunityIconName = keyof typeof MaterialCommunityIcons.glyphMap
-
 type IconName = IonIconName | MaterialCommunityIconName
 
-interface IconProps extends Omit<TextProps, 'suppressHighlighting'> {
+interface IconProps extends TextProps {
 	name: IconName
 	size?: number
 	color?: string
 }
 
-const isGlyphOf = (name: IconName, IconType: IconType) => Object.keys(IconType.glyphMap).includes(name)
+/** Check if a name is a glyph for the given icon set. */
+const isGlyphOf = (name: IconName, iconSet: IconSet) => Object.keys(iconSet.glyphMap).includes(name)
 
 function Icon({ name, size = 24, color, ...props }: IconProps) {
-	const { colorScheme } = useColorScheme()
+	const themeColors = useTheme()
 
-	const iconsProps = {
+	if (!color) {
+		color = themeColors.tint.primary
+	}
+
+	const iconsProps: Omit<IconProps, 'name'> = {
 		size,
-		color: color || colors.tint.primary[colorScheme || 'dark'],
+		color: color || themeColors.tint.primary,
 		suppressHighlighting: true,
 		...props,
 	}
@@ -39,9 +41,18 @@ function Icon({ name, size = 24, color, ...props }: IconProps) {
 		)
 	}
 
+	if (isGlyphOf(name, MaterialCommunityIcons)) {
+		return (
+			<MaterialCommunityIcons
+				name={name as MaterialCommunityIconName}
+				{...iconsProps}
+			/>
+		)
+	}
+
 	return (
-		<MaterialCommunityIcons
-			name={name as MaterialCommunityIconName}
+		<Ionicons
+			name={undefined}
 			{...iconsProps}
 		/>
 	)
@@ -50,5 +61,4 @@ function Icon({ name, size = 24, color, ...props }: IconProps) {
 Icon.displayName = 'Icon'
 
 export default Icon
-
 export type { IconName }

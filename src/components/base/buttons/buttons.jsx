@@ -28,23 +28,23 @@ const valid_btn_types = ['plain', 'grey', 'tinted', 'filled ', 'text', 'icon']
 const tw_styles = {
 	plain: {
 		btn: 'bg-transparent',
-		text: `text-xl font-raleway-semibold text-grey dark:text-grey`,
+		text: `text-xl font-inter-semibold text-grey dark:text-grey`,
 	},
 	grey: {
 		btn: 'px-5 py-3 bg-grey-20 dark:bg-grey-85/30',
-		text: `text-xl font-raleway-semibold text-grey-80 dark:text-grey-40`,
+		text: `text-xl font-inter-semibold text-grey-80 dark:text-grey-40`,
 	},
 	tinted: {
 		btn: 'px-5 py-3 bg-slate-30 dark:bg-slate-90',
-		text: `text-xl font-raleway-semibold text-slate`,
+		text: `text-xl font-inter-semibold text-slate`,
 	},
 	filled: {
 		btn: 'px-5 py-3 bg-blue',
-		text: `text-xl font-raleway-semibold text-white`,
+		text: `text-xl font-inter-semibold text-white`,
 	},
 	text: {
 		btn: 'bg-transparent',
-		text: `text-base leading-base font-raleway text-black dark:text-white`,
+		text: `text-base leading-base font-inter-regular text-black dark:text-white`,
 	},
 	icon: {
 		btn: 'p-0',

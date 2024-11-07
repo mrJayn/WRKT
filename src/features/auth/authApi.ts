@@ -1,88 +1,99 @@
-import { retry } from '@reduxjs/toolkit/query'
-import API from '@features/API'
-import { updateAuths } from '@api/auth'
-import type { JWT, UserEmail, UserCredentials, UserData, UserToken } from './types'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
+import type { MutationLifecycleApi } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 
-const transformTokenPairResponse = async (jwt: JWT) => {
-	await updateAuths(jwt)
-	return {
-		token: jwt.access,
-	}
+import CONFIG from '@src/CONFIG'
+import type { UserCredentials, UserData, UserLookupFields } from '@src/types/features/User'
+import axiosBaseQuery from '@features/API/baseQuery/axiosBaseQuery'
+import * as TokenUtils from '@libs/TokenUtils'
+import { setAuthToken } from './authSlice'
+import type { AuthTokenPair } from './types'
+
+type UserRegistration = UserCredentials & Pick<UserData, 'username'>
+
+const onObtainTokenPairQueryStarted = async <T = any>(
+	_arg: T,
+	{ dispatch, queryFulfilled }: MutationLifecycleApi<T, BaseQueryFn, AuthTokenPair, 'authApi'>
+) => {
+	try {
+		const { data: tokenPair } = await queryFulfilled
+
+		// patch secure-store & auth-slice
+		await TokenUtils.setAuthTokenPair(tokenPair)
+		dispatch(setAuthToken(tokenPair.access))
+
+		// pessimistic cache update
+		return
+		// login
+		const updateAuthStatus = dispatch(
+			authApi.util.updateQueryData('authenticate', undefined, (draft) => {
+				Object.assign(draft, true)
+			})
+		)
+		// register
+		const upsertAuthStatus = dispatch(authApi.util.upsertQueryData('authenticate', undefined, true))
+	} catch {}
 }
 
-const authApi = API.injectEndpoints({
+const authApi = createApi({
+	reducerPath: 'authApi',
+	baseQuery: axiosBaseQuery(),
+	//
+	keepUnusedDataFor: 0,
+	refetchOnFocus: true,
+	refetchOnReconnect: true,
+	refetchOnMountOrArgChange: CONFIG.TOKEN_LIFETIMES.ACCESS,
+	//
 	endpoints: (builder) => ({
-		/**
-		 * Login an existing user with an `email` and `password`,
-		 * and return a token str to inidcate authentication.
-		 */
-		login: builder.mutation<UserToken, UserCredentials>({
-			query: (UserCredentials) => ({
-				url: 'login/',
-				method: 'POST',
-				data: UserCredentials,
-			}),
-			transformResponse: transformTokenPairResponse,
-			extraOptions: {
-				maxRetries: 0,
-				backoff: () => {
-					retry.fail({
-						cause: 'Connection Error',
-						message: 'Our servers may be down. Please try again later.',
-					})
-				},
+		// Get the authenticatation status for a user.
+		authenticate: builder.query<boolean, void>({
+			async queryFn(_arg, { dispatch }, _extraOptions, _axiosBaseQuery) {
+				return TokenUtils.getTokenPair().then((tokenPair) => {
+					if (tokenPair) {
+						dispatch(setAuthToken(tokenPair.access))
+					}
+					return { data: !!tokenPair?.access }
+				})
+			},
+			onCacheEntryAdded: (arg, api) => {
+				console.log('[authApi] cache entry added...', { arg })
 			},
 		}),
 
-		/**
-		 * Register a new user.
-		 */
-		register: builder.mutation<UserToken, UserData>({
-			query: (userData) => ({
-				url: 'register/',
+		//  Login an existing user.
+		login: builder.mutation<AuthTokenPair, UserCredentials>({
+			query: (userCredentials) => ({
 				method: 'POST',
+				url: 'auth/login/',
+				data: userCredentials,
+			}),
+			onQueryStarted: onObtainTokenPairQueryStarted,
+			onCacheEntryAdded: (arg, api) => {
+				console.log('[authApi] cache entry added...', { arg })
+			},
+		}),
+
+		//  Create a new user.
+		register: builder.mutation<AuthTokenPair, UserRegistration>({
+			query: (userData) => ({
+				method: 'POST',
+				url: 'auth/register/',
 				data: userData,
 			}),
-			transformResponse: transformTokenPairResponse,
+			onQueryStarted: onObtainTokenPairQueryStarted,
 		}),
 
-		/**
-		 * Validates a user email address.
-		 */
-		validateEmail: builder.mutation<Partial<UserEmail>, UserEmail>({
-			query: (userData) => ({
-				url: `register/validate/`,
+		//  Validate a new user.
+		validateEmail: builder.mutation<UserLookupFields, UserLookupFields>({
+			query: ({ email }) => ({
 				method: 'POST',
-				data: userData,
+				url: 'auth/register/validate/',
+				data: { email },
 			}),
-			// onQueryStarted: ({ email }, { dispatch }) => {
-			// 	dispatch(updateUser({ email }))
-			// },
-			transformErrorResponse: (error: { data: any }) => {
-				return { message: error.data.email['0'] }
-			},
-			extraOptions: {
-				maxRetries: 0,
-			},
-		}),
-
-		/**
-		 * Reobtain a users auth token from a stored refresh token.
-		 */
-		refresh: builder.mutation<UserToken, UserToken>({
-			query: ({ token }) => ({
-				url: 'refresh/',
-				method: 'POST',
-				data: { refresh: token },
-			}),
-			transformResponse: transformTokenPairResponse,
-			extraOptions: {
-				maxRetries: 0,
-			},
+			transformErrorResponse: (error: { data: any }) => ({ message: error.data.email['0'] }),
 		}),
 	}),
 })
 
+export const { useAuthenticateQuery, useLoginMutation, useRegisterMutation, useValidateEmailMutation } = authApi
 export default authApi
-
-export const { useLoginMutation, useRegisterMutation, useValidateEmailMutation } = authApi

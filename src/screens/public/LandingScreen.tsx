@@ -8,7 +8,7 @@ import { BlurView } from 'expo-blur'
 import ROUTES from '@src/ROUTES'
 import Navigation from '@navigation/Navigation'
 import useAssets from '@hooks/useAssets'
-import usePreferredTheme from '@hooks/useColorScheme'
+import useThemePreference from '@hooks/useThemePreference'
 import AppleSignIn from '@components/SignInButtons/AppleSignIn'
 import DefaultButton from '@components/DefaultButton'
 import P from '@components/P'
@@ -22,9 +22,11 @@ const SUB_TITLE_TEXT = 'Build a workout for yourself or at least do something.'
 function LandingScreen() {
 	const [isReady, setIsReady] = useState(false)
 	const [appleSignInAvailable, setIsAppleSignInAvailable] = useState(false)
-	const isFocusedSV = useSharedValue(false)
-	const colorScheme = usePreferredTheme()
+	const colorScheme = useThemePreference()
 	const assets = useAssets()
+
+	/*
+	const isFocusedSV = useSharedValue(false)
 
 	useFocusEffect(
 		useCallback(() => {
@@ -34,14 +36,14 @@ function LandingScreen() {
 			}
 		}, [])
 	)
+	*/
 
 	useEffect(() => {
-		const prepare = async () => {
-			const isAvailable = await AppleAuthentication.isAvailableAsync()
-			setIsAppleSignInAvailable(isAvailable)
+		const checkAppleAuthAvailability = async () => {
+			await AppleAuthentication.isAvailableAsync().then(setIsAppleSignInAvailable)
 			setIsReady(true)
 		}
-		prepare()
+		checkAppleAuthAvailability()
 	}, [])
 
 	return (
@@ -68,7 +70,7 @@ function LandingScreen() {
 					<DefaultButton
 						text='Log in'
 						onPress={() => {
-							Navigation.navigate(ROUTES.LOGIN.route)
+							Navigation.navigate(ROUTES.LOGIN.getRoute())
 						}}
 						textClassName='font-inter-medium tracking-1'
 						className='pt-5 pb-10'
