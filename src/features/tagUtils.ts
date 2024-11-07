@@ -10,7 +10,7 @@ type ResultBase = { id: number | string }
 type TagDescriptorsFn<Result> = <TResult extends Result, TTag extends ApiTagType>(
 	result: TResult | undefined,
 	tagType: TTag
-) => ReadonlyArray<TagDescription<TTag>>
+) => readonly TagDescription<TTag>[]
 
 /** Returns the provided tag descriptors for a LIST result. */
 function providesList<R extends ResultBase[], T extends ApiTagType>(result: R | undefined, tagType: T) {
@@ -60,8 +60,6 @@ function getTagDescriptors<R extends ResultBase | ResultBase[], T extends ApiTag
 	tagType: T,
 	resultType: 'list' | 'detail'
 ) {
-	const isList = Array.isArray(result)
-
 	if (resultType === 'list') {
 		// list result
 		return result

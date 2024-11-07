@@ -8,8 +8,8 @@ const APITagTypes = [
 	'Workout',
 	'Day',
 	'ActiveDay',
-	// 'Program',
-	// 'Week',
+	'Program',
+	'Week',
 	'Exercise',
 	//
 	'Network',

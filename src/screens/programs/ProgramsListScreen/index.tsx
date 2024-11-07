@@ -1,17 +1,18 @@
-import { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
-import { colors } from '@colors'
-import SCREENS from '@src/SCREENS'
+import { theme } from 'tailwind.config'
+
+import ROUTES from '@src/ROUTES'
+import type { Program } from '@src/types/features'
 import useHeaderLeftButton from '@hooks/useHeaderLeftButton'
-import { DefaultScreen, Button } from '@components/base'
+import Navigation from '@navigation/Navigation'
+import DefaultButton from '@components/DefaultButton'
+import ScreenWrapper from '@components/ScreenWrapper'
 import ScreenLoader from '@components/ScreenLoader'
 import QueryErrorMessage from '@components/QueryErrorMessage'
+
 import ProgramDetailView from './ProgramDetailView'
-import Navigation from '@navigation/Navigation'
-import ROUTES from '@src/ROUTES'
-import { Program } from '@src/types/features'
-import DefaultButton from '@components/DefaultButton'
 
 function ProgramsScreen() {
 	const [[isEditing, shouldSaveEdits], setEditing] = useState([false, true])
@@ -28,7 +29,7 @@ function ProgramsScreen() {
 	useHeaderLeftButton({
 		state: isEditing,
 		label: 'Cancel',
-		tintColor: colors.tint.warning,
+		tintColor: theme.colors.tint.warning,
 		onPress: onCancel,
 		backImageVisible: false,
 		useBackButton: false,
@@ -41,7 +42,7 @@ function ProgramsScreen() {
 	return (
 		<>
 			{data && (
-				<DefaultScreen className='p-3 pt-32'>
+				<ScreenWrapper className='p-3 pt-32'>
 					<View className='absolute top-0 right-0 justify-center'>
 						<DefaultButton
 							text={isEditing ? 'Done' : 'Edit'}
@@ -71,7 +72,7 @@ function ProgramsScreen() {
 					{/* 
 					{data?.length < 3 && !editing && <CreateProgramButton />} 
 					*/}
-				</DefaultScreen>
+				</ScreenWrapper>
 			)}
 			{!isSuccess && <ScreenLoader />}
 		</>

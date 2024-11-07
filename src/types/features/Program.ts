@@ -1,4 +1,4 @@
-import { Week } from './ProgramTypes'
+import type { Week } from './Week'
 
 export type Program = {
 	id: number // pk
@@ -6,7 +6,7 @@ export type Program = {
 	name: string
 	startdate: string
 	duration: number
-	active: boolean
+	isActive: boolean
 	order: number
-	weeks?: ReadonlyArray<Week>
+	weeks?: readonly Week[]
 }
