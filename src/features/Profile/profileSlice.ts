@@ -1,28 +1,30 @@
+import { merge } from 'lodash'
 import { createSlice } from '@reduxjs/toolkit'
+
+import CONST from '@src/CONST'
 import type { Profile } from '@src/types/features'
 import profileAPI from './profileAPI'
-import CONST from '@src/CONST'
-import { merge } from 'lodash'
+
+type ProfileSliceState = Profile | null
 
 const profileSlice = createSlice({
 	name: 'profile',
-	initialState: {} as Profile,
+	initialState: null as ProfileSliceState,
 	reducers: {},
 	extraReducers: (builder) => {
-		/** Get the profile of the current user. */
+		// Match a successful `get-profile` query.
 		builder.addMatcher(profileAPI.endpoints.getProfile.matchFulfilled, (state, action) => {
-			// console.log('[ profileSlice ] update fullfilled!', action.payload)
 			merge(state, action.payload)
 		})
 
-		/** Update the profile of the current user. */
+		// Match a successful `update-profile` query.
 		builder.addMatcher(profileAPI.endpoints.updateProfile.matchFulfilled, (state, action) => {
 			merge(state, action.payload)
 		})
 	},
 	selectors: {
 		selectProfile: (state) => state,
-		selectPreferredTheme: (state) => state.theme || CONST.THEME.SYSTEM,
+		selectPreferredTheme: (state) => state?.theme ?? CONST.THEME.SYSTEM,
 	},
 })
 

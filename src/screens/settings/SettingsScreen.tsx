@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux'
 //
 import SCREENS from '@src/SCREENS'
 import { TabsNavigatorParamList } from '@navigation/types'
-import { share_app } from '@utils/share'
 import DefaultButton from '@components/DefaultButton'
 import ScreenWrapper from '@components/ScreenWrapper'
 import P from '@components/P'
@@ -67,7 +66,7 @@ function SettingsScreen(props: SettingsScreenProps) {
 			icon: 'barbell-outline',
 			onPress: goToManager,
 		},
-		{ text: 'Share', icon: 'share-outline', onPress: share_app },
+		{ text: 'Share', icon: 'share-outline', onPress: () => console.log('>>share_app()') },
 		{ text: 'Contact', icon: 'mail-outline', onPress: send_email },
 	] as OptionsArray
 

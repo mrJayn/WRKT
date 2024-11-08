@@ -1,6 +1,5 @@
 import { Easing } from 'react-native-reanimated'
 import SCREENS from './SCREENS'
-import CountryCodes from './constants/countries'
 
 /**
  * App constants.
@@ -48,7 +47,6 @@ const CONST = {
 	},
 
 	AUTH_HEADER_TYPE: 'Bearer',
-	// BEARER_TYPE: "JWT",
 
 	AXIOS_DEFAULTS: {
 		headers: {
@@ -61,25 +59,11 @@ const CONST = {
 		xsrfHeaderName: 'X-CSRFToken',
 	},
 
-	// AUTO_AUTH_STATE: {
-	// 	NOT_STARTED: 'not-started',
-	// 	SIGNING_IN: 'signing-in',
-	// 	JUST_SIGNED_IN: 'just-signed-in',
-	// 	FAILED: 'failed',
-	// },
-
-	// AUTH_TOKEN_TYPES: {
-	// 	ANONYMOUS: 'anonymousAccount',
-	// 	SUPPORT: 'support',
-	// },
-
 	BUTTON: {
 		ACTIVE_SCALE: 0.9,
 		ACTIVE_OPACITY: 0.65,
 		DISABLED_OPACITY: 0.3,
 	},
-
-	COUNTRIES: CountryCodes,
 
 	DATE_OF_BIRTH: {
 		MIN_AGE: 5,
@@ -390,10 +374,6 @@ const CONST = {
 		UPDATE: 'update',
 		DESTROY: 'destroy',
 	},
-
-	WEEKDAY_NAMES: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
-
-	WEEKDAY_SHORT_NAMES: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
 } as const
 
 export default CONST

@@ -1,31 +1,30 @@
 import { useState } from 'react'
 import { View } from 'react-native'
-import Structures from '@utils/structures'
-import { shareProgram } from '@utils/share'
+import { theme } from 'tailwind.config'
 
-import { colors } from '@colors'
-import { Button, EditableProgram, H } from '@components/base'
 import ListDetailScreen from 'src/screens/common/list-detail-screen'
+import DefaultButton from '@components/DefaultButton'
+import { EditableProgram } from '@components/base'
 
 const ProgramsDetail = ({ route }) => {
 	const { name, data } = route.params
-	const { createProgWeek, createProgram } = Structures
 
 	const [currData, setCurrData] = useState(data)
 	const [editing, setEditing] = useState(false)
 
 	const manager = {
-		add: (is_superset = false) => {
-			const nextId = currData[currData.length - 1].id + 1
-			const nextOrder = Math.max(currData.map(({ order }) => order)) + 1
-			setCurrData([...currData, createProgWeek(nextId, nextOrder, is_superset)])
+		add: () => {
+			// const nextId = currData[currData.length - 1].id + 1
+			// const nextOrder = Math.max(currData.map(({ order }) => order)) + 1
+			const newWeek = {} // createProgWeek(nextId, nextOrder, is_superset)
+			setCurrData([...currData, newWeek])
 		},
-		delete: (id_to_delete) => {
+		delete: (id) => {
 			const updatedData = currData
-				.filter(({ id }) => id !== id_to_delete)
+				.filter((item) => item.id !== id)
 				.map((item) => ({
 					...item,
-					order: item.order - (item.order > id_to_delete ? 1 : 0),
+					order: item.order - (item.order > id ? 1 : 0),
 				}))
 			setCurrData(updatedData)
 		},
@@ -39,15 +38,15 @@ const ProgramsDetail = ({ route }) => {
 			title={name}
 			ActionsBar={() => (
 				<View className='flex-row justify-end bg-primary-light dark:bg-primary-dark z-2'>
-					<Button
+					<DefaultButton
 						icon='share-outline'
-						iconColor={colors.tint.warning}
+						iconColor={theme.colors.tint.warning}
 						iconSize={21}
-						onPress={() => shareProgram(name, data)}
+						onPress={() => console.log('>> shareProgram(name, data)')}
 					/>
-					<Button
+					<DefaultButton
 						icon='ellipsis-horizontal-circle'
-						iconColor={colors.tint.warning}
+						iconColor={theme.colors.tint.warning}
 						iconSize={21}
 						onPress={() => setEditing(!editing)}
 					/>

@@ -46,7 +46,7 @@ type ButtonActionProps =
 			linkToType?: string | undefined
 	  }
 
-type DefaultButtonProps = TouchableOpacityProps & CustomButtonProps & ButtonActionProps
+type DefaultButtonProps = Omit<TouchableOpacityProps, 'onPress'> & CustomButtonProps & ButtonActionProps
 
 export type { ButtonVariantName, DefaultButtonProps }
 export { ButtonVariant }

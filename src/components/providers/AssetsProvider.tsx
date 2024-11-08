@@ -1,13 +1,24 @@
 import React, { createContext, useEffect, useState } from 'react'
+import { Asset as ExpoAsset } from 'expo-asset'
 import * as ExpoFont from 'expo-font'
 import CONFIG from '@src/CONFIG'
-import { getUriSourceFromModule } from '@libs/AssetsUtils'
+
+/** Method to obtain the local uri of a given asset module. */
+const getUriSourceFromModule = async (module: any): Promise<string> => {
+	const [{ localUri }] = await ExpoAsset.loadAsync(module)
+	if (!localUri) {
+		throw new Error(`An error occurred while loading the asset from the path "${module}".`)
+	}
+	return localUri
+}
 
 type AssetsContextType = Record<keyof typeof CONFIG.ASSETS.ICONS, { uri: string }>
 
 const AssetsContext = createContext<AssetsContextType | null>(null)
 
-type AssetsProviderProps = { children: React.ReactNode }
+type AssetsProviderProps = {
+	children: React.ReactNode
+}
 
 function AssetsProvider({ children }: AssetsProviderProps) {
 	const [contextValue, setContextValue] = useState<AssetsContextType>()

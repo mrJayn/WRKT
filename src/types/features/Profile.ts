@@ -5,19 +5,19 @@ type WeightUnits = 'lbs' | 'kgs'
 
 type Profile = {
 	/** The id of the current profile. */
-	id?: number
+	id: number
 
 	/** Indicates if push notifications are enabled. */
-	notifications?: boolean
+	notifications: boolean
 
 	/** The day index of the week that the week should start on.  */
-	dayOneWkday?: Weekday
+	dayOneWkday: Weekday
 
 	/** The units of weight measurement. */
-	units?: WeightUnits
+	units: WeightUnits
 
 	/** The preferred theme. Defaults to system. */
-	theme?: ThemePreference
+	theme: ThemePreference
 }
 
 export type { WeightUnits, Profile }

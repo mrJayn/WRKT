@@ -2,7 +2,6 @@ import { useContext } from 'react'
 import { View, Linking } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { Button, DefaultScreen, P, ProfileContext } from '@components/base'
-import { share_app } from '@utils/share'
 
 const send_email = () => Linking.openURL('mailto:support@example.com?subject=SendMail&body=Description')
 
@@ -48,7 +47,7 @@ const ProfileScreen = ({ navigation: { navigate } }) => {
 			icon: 'barbell',
 			onPress: goToManager,
 		},
-		{ text: 'Share', icon: 'share', onPress: share_app },
+		{ text: 'Share', icon: 'share', onPress: () => console.log('>>share_app()') },
 		{ text: 'Contact', icon: 'mail', onPress: send_email },
 	]
 

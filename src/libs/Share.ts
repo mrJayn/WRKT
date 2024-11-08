@@ -1,4 +1,9 @@
-export const workout_template = (name, exercises) => `
+import * as Print from 'expo-print'
+import { shareAsync } from 'expo-sharing'
+import type { Exercise, Week } from '@src/types/features'
+
+const shareWorkout = async (name: string, exercises: readonly Exercise[]) => {
+	const html = `
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
@@ -7,27 +12,31 @@ export const workout_template = (name, exercises) => `
 <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
   ${name}
 </h1>
-${exercises.map(({ name, sets_data }) => {
+${exercises.map(({ name, sets }) => {
 	return `<div>
     <p style="font-size: 18px; font-weight: semibold;">
     ${name}
       </p>
       <p style="font-size: 16px; font-weight: normal;">
-      ${sets_data.s1.sets} x ${sets_data.s1.reps}  |  ${sets_data.s1.weight}
+      ${sets?.[0].sets} x ${sets?.[0].reps}  |  ${sets?.[0].weight}
       </p>
       <p style="font-size: 16px; font-weight: normal;">
-      ${sets_data.s2.sets} x ${sets_data.s2.reps}  |  ${sets_data.s2.weight}
+      ${sets?.[1].sets} x ${sets?.[1].reps}  |  ${sets?.[1].weight}
       </p>
       <p style="font-size: 16px; font-weight: normal;">
-      ${sets_data.s3.sets} x ${sets_data.s3.reps}  |  ${sets_data.s3.weight}
+      ${sets?.[2].sets} x ${sets?.[2].reps}  |  ${sets?.[2].weight}
       </p>
   </div>`
 })}
 </body>
 </html>
 `
+	const { uri } = await Print.printToFileAsync({ html })
+	await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' })
+}
 
-export const program_template = (name, data) => `
+const shareProgram = async (name: string, weeks: readonly Week[]) => {
+	const html = `
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
@@ -36,18 +45,22 @@ export const program_template = (name, data) => `
 <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
   ${name}
 </h1>
-${data.map(({ name }) => {
+${weeks.map(({ week_id }) => {
 	return `<div>
     <p style="font-size: 18px; font-weight: semibold;">
-    ${name}
+    Week ${week_id}
       </p>
   </div>`
 })}
 </body>
 </html>
 `
+	const { uri } = await Print.printToFileAsync({ html })
+	await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' })
+}
 
-export const app_template = () => `
+const share_app = async () => {
+	const html = `
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
@@ -60,3 +73,8 @@ WRKT
 </body>
 </html>
 `
+	const { uri } = await Print.printToFileAsync({ html })
+	await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' })
+}
+
+export { shareWorkout, shareProgram, share_app }
